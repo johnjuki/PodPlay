@@ -18,6 +18,7 @@ import com.podplay.android.R
 import com.podplay.android.adapter.PodcastListAdapter
 import com.podplay.android.repository.ItunesRepo
 import com.podplay.android.repository.PodcastRepo
+import com.podplay.android.service.FeedService
 import com.podplay.android.service.ItunesService
 import com.podplay.android.viewmodel.PodcastSummaryViewData
 import com.podplay.android.viewmodel.PodcastViewModel
@@ -94,7 +95,7 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
     private fun setUpViewModels() {
         val service = ItunesService.instance
         searchViewModel.iTunesRepo = ItunesRepo(service)
-        podcastViewModel.podcastRepo = PodcastRepo()
+        podcastViewModel.podcastRepo = PodcastRepo(FeedService.instance)
     }
 
     private fun updateControls() {
@@ -112,15 +113,9 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
     }
 
     override fun onShowDetails(podcastSummaryViewData: PodcastSummaryViewData) {
-        val feedUrl = podcastSummaryViewData.feedUrl ?: return
-        showProgressBar()
-        val podcast =
+        podcastSummaryViewData.feedUrl?.let {
+            showProgressBar()
             podcastViewModel.getPodcast(podcastSummaryViewData)
-        hideProgressBar()
-        if (podcast != null) {
-            showDetailsFragment()
-        } else {
-            showError("Error loading feed $feedUrl")
         }
     }
 
@@ -168,6 +163,17 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
         supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount == 0) {
                 databinding.podcastRecyclerView.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun createSubscription() {
+        podcastViewModel.podcastLiveData.observe(this) {
+            hideProgressBar()
+            if (it != null) {
+                showDetailsFragment()
+            } else {
+                showError("Error loading feed")
             }
         }
     }
