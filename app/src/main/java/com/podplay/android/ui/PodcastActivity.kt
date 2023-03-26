@@ -23,6 +23,8 @@ import com.podplay.android.service.ItunesService
 import com.podplay.android.viewmodel.PodcastSummaryViewData
 import com.podplay.android.viewmodel.PodcastViewModel
 import com.podplay.android.viewmodel.SearchViewModel
+import com.podplay.android.worker.EpisodeUpdateWorker
+import java.util.concurrent.TimeUnit
 
 class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapterListener,
     PodcastDetailsFragment.OnPodcastDetailsListener {
@@ -45,6 +47,7 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
         setupPodcastListView()
         handleIntent(intent)
         addBackStackListener()
+        scheduleJobs()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -98,6 +101,15 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
         if (Intent.ACTION_SEARCH == intent.action) {
             val query = intent.getStringExtra(SearchManager.QUERY) ?: return
             performSearch(query)
+        }
+        val podcastFeedUrl = intent.getStringExtra(EpisodeUpdateWorker.EXTRA_FEED_URL)
+        if (podcastFeedUrl != null) {
+            podcastViewModel.viewModelScope.launch {
+                val podcastSummaryViewData = podcastViewModel.setActivePodcast(podcastFeedurl)
+                podcastSummaryViewData?.let { podcastSummaryView ->
+                    onShowDetails(podcastSummaryView)
+                }
+            }
         }
     }
 
@@ -211,6 +223,7 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
 
     companion object {
         private const val TAG_DETAILS_FRAGMENT = "DetailsFragment"
+        private const val TAG_EPISODE_UPDATE_JOB = "com.podplay.android.episodes"
     }
 
     override fun onSubscribe() {
@@ -221,5 +234,21 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
     override fun onUnsubscribe() {
         podcastViewModel.deleteActivePodcast()
         supportFragmentManager.popBackStack()
+    }
+
+    private fun scheduleJobs() {
+        val constraints: Constraints = Constraints.Builder().apply {
+            setRequiredNetworkType(NetworkType.CONNECTED)
+            setRequiresCharging(true)
+        }.build()
+        val request = PeriodicWorkRequestBuilder<EpisodeUpdateWorker>(
+            1, TimeUnit.HOURS
+        )
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            TAG_EPISODE_UPDATE_JOB,
+            ExistingPeriodicWorkPolicy.REPLACE, request
+        )
     }
 }
