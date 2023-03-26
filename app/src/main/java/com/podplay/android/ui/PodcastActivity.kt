@@ -24,7 +24,8 @@ import com.podplay.android.viewmodel.PodcastSummaryViewData
 import com.podplay.android.viewmodel.PodcastViewModel
 import com.podplay.android.viewmodel.SearchViewModel
 
-class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapterListener {
+class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapterListener,
+    PodcastDetailsFragment.OnPodcastDetailsListener {
 
     private val searchViewModel by viewModels<SearchViewModel>()
     private lateinit var podcastListAdapter: PodcastListAdapter
@@ -41,6 +42,7 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
         setUpToolbar()
         setUpViewModels()
         updateControls()
+        setupPodcastListView()
         handleIntent(intent)
         addBackStackListener()
     }
@@ -49,6 +51,16 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_search, menu)
         searchMenuItem = menu.findItem(R.id.search_item)
+        searchMenuItem.setOnActionExpandListener(object: MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                showSubscribedPodcasts()
+                return true
+            }
+        })
         val searchView = searchMenuItem.actionView as SearchView
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchView.setSearchableInfo((searchManager.getSearchableInfo(componentName)))
@@ -56,7 +68,8 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
             databinding.podcastRecyclerView.visibility = View.INVISIBLE
         }
         if (databinding.podcastRecyclerView.visibility ==
-            View.INVISIBLE) {
+            View.INVISIBLE
+        ) {
             searchMenuItem.isVisible = false
         }
         return true
@@ -95,7 +108,7 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
     private fun setUpViewModels() {
         val service = ItunesService.instance
         searchViewModel.iTunesRepo = ItunesRepo(service)
-        podcastViewModel.podcastRepo = PodcastRepo(FeedService.instance)
+        podcastViewModel.podcastRepo = PodcastRepo(rssService, podcastViewModel.podcastDao)
     }
 
     private fun updateControls() {
@@ -113,9 +126,13 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
     }
 
     override fun onShowDetails(podcastSummaryViewData: PodcastSummaryViewData) {
-        podcastSummaryViewData.feedUrl?.let {
-            showProgressBar()
+        podcastSummaryViewData.feedUrl ?: return
+        showProgressBar()
+        podcastViewModel.viewModelScope.launch (context =
+        Dispatchers.Main) {
             podcastViewModel.getPodcast(podcastSummaryViewData)
+            hideProgressBar()
+            showDetailsFragment()
         }
     }
 
@@ -178,7 +195,31 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapter.PodcastListAdapt
         }
     }
 
+    private fun showSubscribedPodcasts() {
+        val podcasts = podcastViewModel.getPodcasts()?.value
+        if (podcasts != null) {
+            toolbar.title = getString(R.string.subscribed_podcasts)
+            podcastListAdapter.setSearchData(podcasts)
+        }
+    }
+
+    private fun setupPodcastListView() {
+        podcastViewModel.getPodcasts()?.observe(this) {
+            if (it != null) showSubscribedPodcasts()
+        }
+    }
+
     companion object {
         private const val TAG_DETAILS_FRAGMENT = "DetailsFragment"
+    }
+
+    override fun onSubscribe() {
+        podcastViewModel.saveActivePodcast()
+        supportFragmentManager.popBackStack()
+    }
+
+    override fun onUnsubscribe() {
+        podcastViewModel.deleteActivePodcast()
+        supportFragmentManager.popBackStack()
     }
 }
