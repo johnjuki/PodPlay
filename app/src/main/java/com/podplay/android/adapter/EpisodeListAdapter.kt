@@ -8,28 +8,47 @@ import com.podplay.android.util.HtmlUtils
 import com.podplay.android.viewmodel.PodcastViewModel
 
 class EpisodeListAdapter(
-    private var episodeViewList:
-    List<PodcastViewModel.EpisodeViewData>?
+    private var episodeViewList: List<PodcastViewModel.EpisodeViewData>?,
+    private val episodeListAdapterListener: EpisodeListAdapterListener,
 ) : RecyclerView.Adapter<EpisodeListAdapter.ViewHolder>() {
+
+    interface EpisodeListAdapterListener {
+        fun onSelectedEpisode(episodeViewData: PodcastViewModel.EpisodeViewData)
+    }
+
     inner class ViewHolder(
-        databinding: EpisodeItemBinding
+        databinding: EpisodeItemBinding,
+        val episodeListAdapterListener: EpisodeListAdapterListener,
     ) : RecyclerView.ViewHolder(databinding.root) {
         var episodeViewData: PodcastViewModel.EpisodeViewData? =
             null
         val titleTextView: TextView = databinding.titleView
         val descTextView: TextView = databinding.descView
         val durationTextView: TextView = databinding.durationView
-        val releaseDateTextView: TextView =
-            databinding.releaseDateView
+        val releaseDateTextView: TextView = databinding.releaseDateView
+
+        init {
+            databinding.root.setOnClickListener {
+                episodeViewData?.let { episodeListAdapterListener.onSelectedEpisode(it) }
+            }
+        }
+
     }
+
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): EpisodeListAdapter.ViewHolder {
-        return ViewHolder(EpisodeItemBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            EpisodeItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), episodeListAdapterListener
+        )
     }
-    override fun onBindViewHolder(holder: ViewHolder, position:
-    Int) {
+
+    override fun onBindViewHolder(
+        holder: ViewHolder, position:
+        Int
+    ) {
         val episodeViewList = episodeViewList ?: return
         val episodeView = episodeViewList[position]
         holder.episodeViewData = episodeView
