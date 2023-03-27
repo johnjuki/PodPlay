@@ -1,8 +1,10 @@
 package com.podplay.android.db
 
 import android.content.Context
+import androidx.room.*
 import com.podplay.android.model.Episode
 import com.podplay.android.model.Podcast
+import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 class Converters {
@@ -36,7 +38,7 @@ abstract class PodPlayDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     PodPlayDatabase::class.java,
-                    "PodPlayPlayer",
+                    "PodPlayer",
                 )
                     .build()
                 INSTANCE = instance

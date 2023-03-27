@@ -45,8 +45,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/podcastImage"
-        app:layout_constraintTop_toBottomOf="@+id/
-podcastNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/podcastNameTextView"
         tools:text="Last updated" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

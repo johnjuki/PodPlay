@@ -1,17 +1,23 @@
 package com.podplay.android.repository
 
+import androidx.lifecycle.LiveData
 import com.podplay.android.db.PodcastDao
 import com.podplay.android.model.Episode
 import com.podplay.android.model.Podcast
 import com.podplay.android.service.RssFeedResponse
 import com.podplay.android.service.RssFeedService
 import com.podplay.android.util.DateUtils
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 class PodcastRepo(
     private var feedService: RssFeedService,
     private var podcastDao: PodcastDao,
 ) {
-    fun getPodcast(feedUrl: String): Podcast? {
+
+    suspend fun getPodcast(feedUrl: String): Podcast? {
         val podcastLocal = podcastDao.loadPodcast(feedUrl)
         if (podcastLocal != null) {
             podcastLocal.id?.let {
@@ -27,9 +33,7 @@ class PodcastRepo(
         return podcast
     }
 
-    private fun rssItemsToEpisodes(
-        episodeResponses: List<RssFeedResponse.EpisodeResponse>
-    ): List<Episode> {
+    private fun rssItemsToEpisodes(episodeResponses: List<RssFeedResponse.EpisodeResponse>): List<Episode> {
         return episodeResponses.map {
             Episode(
                 it.guid ?: "",
@@ -45,17 +49,14 @@ class PodcastRepo(
     }
 
     private fun rssResponseToPodcast(
-        feedUrl: String, imageUrl: String, rssResponse:
-        RssFeedResponse
+        feedUrl: String, imageUrl: String, rssResponse: RssFeedResponse
     ): Podcast? {
         val items = rssResponse.episodes ?: return null
         val description = if (rssResponse.description == "")
             rssResponse.summary else rssResponse.description
         return Podcast(
-            null, feedUrl, rssResponse.title, description,
-            imageUrl,
-            rssResponse.lastUpdated, episodes =
-            rssItemsToEpisodes(items)
+            null, feedUrl, rssResponse.title, description, imageUrl,
+            rssResponse.lastUpdated, episodes = rssItemsToEpisodes(items)
         )
     }
 
@@ -69,12 +70,35 @@ class PodcastRepo(
         }
     }
 
-    fun getAll(): LiveData<List<Podcast>> = podcastDao.loadPodcasts()
-
     fun delete(podcast: Podcast) {
         GlobalScope.launch {
             podcastDao.deletePodcast(podcast)
         }
+    }
+
+    fun getAll(): LiveData<List<Podcast>> {
+        return podcastDao.loadPodcasts()
+    }
+
+    suspend fun updatePodcastEpisodes(): MutableList<PodcastUpdateInfo> {
+        val updatedPodcasts: MutableList<PodcastUpdateInfo> = mutableListOf()
+        val podcasts = podcastDao.loadPodcastsStatic()
+        for (podcast in podcasts) {
+            val newEpisodes = getNewEpisodes(podcast)
+            if (newEpisodes.isNotEmpty()) {
+                podcast.id?.let {
+                    saveNewEpisodes(it, newEpisodes)
+                    updatedPodcasts.add(
+                        PodcastUpdateInfo(
+                            podcast.feedUrl,
+                            podcast.feedTitle,
+                            newEpisodes.count()
+                        )
+                    )
+                }
+            }
+        }
+        return updatedPodcasts
     }
 
     private suspend fun getNewEpisodes(localPodcast: Podcast): List<Episode> {
@@ -101,26 +125,5 @@ class PodcastRepo(
         }
     }
 
-    suspend fun updatePodcastEpisodes() : MutableList<PodcastUpdateInfo> {
-        val updatedPodcasts: MutableList<PodcastUpdateInfo> = mutableListOf()
-        val podcasts = podcastDao.loadPodcastsStatic()
-        for (podcast in podcasts) {
-            val newEpisodes = getNewEpisodes(podcast)
-            if (newEpisodes.isNotEmpty()) {
-                podcast.id?.let {
-                    saveNewEpisodes(it, newEpisodes)
-                    updatedPodcasts.add(PodcastUpdateInfo(
-                        podcast.feedUrl, podcast.feedTitle, newEpisodes.count()
-                    ))
-                }
-            }
-        }
-        return updatedPodcasts
-    }
-
-    class PodcastUpdateInfo(
-        val feedUrl: String,
-        val name: String,
-        val newCount: Int,
-    )
+    class PodcastUpdateInfo(val feedUrl: String, val name: String, val newCount: Int)
 }

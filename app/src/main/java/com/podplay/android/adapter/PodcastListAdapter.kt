@@ -1,49 +1,46 @@
 package com.podplay.android.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.podplay.android.viewmodel.PodcastSummaryViewData
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.podplay.android.databinding.SearchItemBinding
+import com.podplay.android.viewmodel.SearchViewModel
 
 class PodcastListAdapter(
-    private var podcastSummaryViewList: List<PodcastSummaryViewData>?,
-    private val podcastListAdapterListener: PodcastAdpaterListener,
-    private val parentActivity: Activity,
+    private var podcastSummaryViewList: List<SearchViewModel.PodcastSummaryViewData>?,
+    private val podcastListAdapterListener: PodcastListAdapterListener,
+    private val parentActivity: Activity
 ) : RecyclerView.Adapter<PodcastListAdapter.ViewHolder>() {
 
     interface PodcastListAdapterListener {
-        fun onShowDetails(
-            podcastSummaryViewData:
-            PodcastSummaryViewData
-        )
+        fun onShowDetails(podcastSummaryViewData: SearchViewModel.PodcastSummaryViewData)
     }
 
     inner class ViewHolder(
         databinding: SearchItemBinding,
-        private val podcastListAdapterListener:
-        PodcastListAdapterListener
+        private val podcastListAdapterListener: PodcastListAdapterListener
     ) : RecyclerView.ViewHolder(databinding.root) {
-        var podcastSummaryViewData: PodcastSummaryViewData? = null
+        var podcastSummaryViewData: SearchViewModel.PodcastSummaryViewData? = null
         val nameTextView: TextView = databinding.podcastNameTextView
-        val lastUpdatedTextView: TextView =
-            databinding.podcastLastUpdatedTextView
+        val lastUpdatedTextView: TextView = databinding.podcastLastUpdatedTextView
         val podcastImageView: ImageView = databinding.podcastImage
-    }
 
-    init {
-        databinding.searchItem.setOnClickListener {
-            podcastSummaryViewData?.let {
-                podcastListAdapterListener.onShowDetails(it)
+        init {
+            databinding.searchItem.setOnClickListener {
+                podcastSummaryViewData?.let {
+                    podcastListAdapterListener.onShowDetails(it)
+                }
             }
         }
     }
 
-    fun setSearchData(
-        podcastSummaryViewData:
-        List<PodcastSummaryViewData>
-    ) {
+    @SuppressLint("NotifyDataSetChanged")
+    fun setSearchData(podcastSummaryViewData: List<SearchViewModel.PodcastSummaryViewData>) {
         podcastSummaryViewList = podcastSummaryViewData
         this.notifyDataSetChanged()
     }
@@ -53,24 +50,18 @@ class PodcastListAdapter(
         viewType: Int
     ): PodcastListAdapter.ViewHolder {
         return ViewHolder(
-            SearchItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ),
+            SearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             podcastListAdapterListener
         )
     }
 
-    override fun onBindViewHolder(
-        holder: ViewHolder, position: Int
-    ) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val searchViewList = podcastSummaryViewList ?: return
         val searchView = searchViewList[position]
         holder.podcastSummaryViewData = searchView
         holder.nameTextView.text = searchView.name
         holder.lastUpdatedTextView.text = searchView.lastUpdated
-        Glide.with(parentActivity)
-            .load(searchView.imageUrl)
-            .into(holder.podcastImageView)
+        Glide.with(parentActivity).load(searchView.imageUrl).into(holder.podcastImageView)
     }
 
     override fun getItemCount(): Int {

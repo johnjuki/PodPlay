@@ -1,35 +1,51 @@
 package com.podplay.android.service
 
+import androidx.viewbinding.BuildConfig
 import com.podplay.android.util.DateUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 import org.w3c.dom.Node
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.Url
 import java.util.concurrent.TimeUnit
 import javax.xml.parsers.DocumentBuilderFactory
 
 class RssFeedService private constructor() {
-    suspend fun getFeed(xmlFileUrl: String): RssFeedResponse? {
+
+    suspend fun getFeed(xmlFileURL: String): RssFeedResponse? {
         val service: FeedService
+
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
+
         val client = OkHttpClient().newBuilder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
+
         if (BuildConfig.DEBUG) {
             client.addInterceptor(interceptor)
         }
         client.build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("${xmlFileURL.split("?")[0]}/")
             .build()
         service = retrofit.create(FeedService::class.java)
+
         try {
             val result = service.getFeed(xmlFileURL)
             if (result.code() >= 400) {
-                println("server error, ${result.code()}, $ { result.errorBody() }")
+                println("server error, ${result.code()}, ${result.errorBody()}")
                 return null
             } else {
-                var rssFeedResponse: RssFeedResponse? = null
-                // return success result
+                var rssFeedResponse: RssFeedResponse?
                 val dbFactory = DocumentBuilderFactory.newInstance()
                 val dBuilder = dbFactory.newDocumentBuilder()
                 withContext(Dispatchers.IO) {
@@ -63,8 +79,10 @@ class RssFeedService private constructor() {
                         "pubDate" -> currentItem.pubDate = node.textContent
                         "link" -> currentItem.link = node.textContent
                         "enclosure" -> {
-                            currentItem.url = node.attributes.getNamedItem("url").textContent
-                            currentItem.type = node.attributes.getNamedItem("type").textContent
+                            currentItem.url = node.attributes.getNamedItem("url")
+                                .textContent
+                            currentItem.type = node.attributes.getNamedItem("type")
+                                .textContent
                         }
                     }
                 }
@@ -75,7 +93,8 @@ class RssFeedService private constructor() {
                     "description" -> rssFeedResponse.description = node.textContent
                     "itunes:summary" -> rssFeedResponse.summary = node.textContent
                     "item" -> rssFeedResponse.episodes?.add(RssFeedResponse.EpisodeResponse())
-                    "pubDate" -> rssFeedResponse.lastUpdated = DateUtils.xmlDateToDate(node.textContent)
+                    "pubDate" -> rssFeedResponse.lastUpdated =
+                        DateUtils.xmlDateToDate(node.textContent)
                 }
             }
         }
@@ -85,9 +104,10 @@ class RssFeedService private constructor() {
             domToRssFeedResponse(childNode, rssFeedResponse)
         }
     }
-
     companion object {
-        val instance: RssFeedResponse by lazy { RssFeedService() }
+        val instance: RssFeedService by lazy {
+            RssFeedService()
+        }
     }
 }
 

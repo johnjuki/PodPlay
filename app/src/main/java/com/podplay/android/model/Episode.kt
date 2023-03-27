@@ -1,10 +1,14 @@
 package com.podplay.android.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(
     foreignKeys = [
-        Foreigney(
+        ForeignKey(
             entity = Podcast::class,
             parentColumns = ["id"],
             childColumns = ["podcastId"],
