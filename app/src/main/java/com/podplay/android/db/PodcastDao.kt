@@ -21,7 +21,7 @@ interface PodcastDao {
     suspend fun loadPodcast(url: String): Podcast?
 
     @Query("SELECT * FROM Podcast WHERE id = :id")
-    suspend fun loadPodcastById(id: String) : Podcast?
+    suspend fun loadPodcastById(id: Long) : Podcast
 
     @Query("SELECT * FROM Episode WHERE guid = :guid")
     suspend fun loadEpisode(guid: String) : Episode?

@@ -28,7 +28,7 @@ import com.podplay.android.util.HtmlUtils
 fun PodcastDetailsRoute(
     feedUrl: String,
     navigateUp: () -> Unit,
-    onEpisodeClick: (guid: String, feedTitle: String, imageUrl: String) -> Unit,
+    onEpisodeClick: (guid: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PodcastDetailsViewModel = hiltViewModel(),
 ) {
@@ -48,7 +48,7 @@ fun PodcastDetailsRoute(
 fun PodcastDetailsScreen(
     uiState: PodcastDetailsUiState,
     navigateUp: () -> Unit,
-    onEpisodeClick: (guid: String, feedTitle: String, imageUrl: String) -> Unit,
+    onEpisodeClick: (guid: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -111,7 +111,7 @@ fun PodcastDetailsScreen(
                     LazyColumn {
                         items(podcast.episodes) { episode ->
                             Column(modifier = Modifier.clickable {
-                                onEpisodeClick(episode.guid, podcast.feedTitle, podcast.imageUrl)
+                                onEpisodeClick(episode.guid)
                             }) {
                                 Text(text = episode.title, fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(4.dp))

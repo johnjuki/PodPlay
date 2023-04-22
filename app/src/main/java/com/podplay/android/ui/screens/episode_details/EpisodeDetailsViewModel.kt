@@ -22,10 +22,16 @@ class EpisodeDetailsViewModel @Inject constructor(
     fun getEpisode(guid: String) = viewModelScope.launch {
         uiState = uiState.copy(isLoading = true)
         podcastRepo.getEpisode(guid)?.let { episode ->
-            uiState = uiState.copy(episodeViewData = episodeToEpisodeView(episode), isLoading = false)
+            getTitleAndImage(episode)
+            uiState = uiState.copy(episode = episode, isLoading = false)
         } ?: run {
-            uiState = uiState.copy(episodeViewData = EpisodeViewData(), isLoading = false) // TODO: show Error instead
+            uiState = uiState.copy(episode = Episode(), isLoading = false) // TODO: show Error instead
         }
+    }
+
+    private fun getTitleAndImage(episode: Episode) = viewModelScope.launch {
+        val podcast = podcastRepo.getPodcastById(episode.podcastId!!)
+        uiState = uiState.copy(podcastName = podcast.feedTitle, podcastImageUrl = podcast.imageUrl)
     }
 
     private fun episodeToEpisodeView(episode: Episode) : EpisodeViewData {
@@ -42,4 +48,5 @@ class EpisodeDetailsViewModel @Inject constructor(
             )
         }
     }
+
 }

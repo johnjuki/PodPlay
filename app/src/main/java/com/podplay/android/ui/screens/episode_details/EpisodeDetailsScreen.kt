@@ -19,13 +19,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.podplay.android.R
+import com.podplay.android.util.DateUtils
 import com.podplay.android.util.HtmlUtils
 
 @Composable
 fun EpisodeDetailsRoute(
     guid: String,
-    feedTitle: String,
-    imageUrl: String,
     navigateUp: () -> Unit,
     viewModel: EpisodeDetailsViewModel = hiltViewModel(),
 ) {
@@ -35,8 +34,6 @@ fun EpisodeDetailsRoute(
     EpisodeDetailsScreen(
         navigateUp = navigateUp,
         uiState = viewModel.uiState,
-        feedTitle = feedTitle,
-        imageUrl = imageUrl,
     )
 }
 
@@ -45,8 +42,6 @@ fun EpisodeDetailsRoute(
 fun EpisodeDetailsScreen(
     navigateUp: () -> Unit,
     uiState: EpisodeDetailsUiState,
-    feedTitle: String,
-    imageUrl: String,
     modifier: Modifier = Modifier,
 ) {
 
@@ -86,10 +81,10 @@ fun EpisodeDetailsScreen(
                         CircularProgressIndicator()
                     }
                 } else {
-                    val episode = uiState.episodeViewData
+                    val episode = uiState.episode
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(imageUrl)
+                            .data(uiState.podcastImageUrl)
                             .placeholder(R.drawable.logo)
                             .crossfade(true)
                             .build(),
@@ -97,21 +92,21 @@ fun EpisodeDetailsScreen(
                         contentDescription = null,
                     )
                     Spacer(modifier = Modifier.height(20.dp))
-                    Text(text = episode.title!!)
+                    Text(text = episode.title)
                     Spacer(modifier = Modifier.height(20.dp))
-                    Text(text = feedTitle)
+                    Text(text = uiState.podcastName)
                     Spacer(modifier = Modifier.height(5.dp))
                     Row {
-//                        Text(text = DateUtils.dateToShortDate(episode.releaseDate!!))
+                        Text(text = DateUtils.dateToShortDate(episode.releaseDate))
                         Text(text = " - ")
-                        Text(text = episode.duration!!)
+                        Text(text = episode.duration)
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     Button(onClick = { /*TODO*/ }) {
                         Text(text = stringResource(R.string.play))
                     }
                     Spacer(modifier = Modifier.height(20.dp))
-                    Text(text = HtmlUtils.htmlToSpannable(episode.description!!).toString())
+                    Text(text = HtmlUtils.htmlToSpannable(episode.description).toString())
                 }
             }
         }

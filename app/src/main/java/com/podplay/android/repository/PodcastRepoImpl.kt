@@ -82,6 +82,10 @@ class PodcastRepoImpl @Inject constructor(
         return podcastDao.loadPodcasts()
     }
 
+    override suspend fun getPodcastById(id: Long): Podcast {
+        return podcastDao.loadPodcastById(id)
+    }
+
     override suspend fun getEpisode(guid: String): Episode? {
         return podcastDao.loadEpisode(guid)
     }

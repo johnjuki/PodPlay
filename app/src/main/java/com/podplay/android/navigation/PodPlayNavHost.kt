@@ -1,6 +1,5 @@
 package com.podplay.android.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -13,10 +12,8 @@ import com.podplay.android.ui.screens.episode_details.EpisodeDetailsRoute
 import com.podplay.android.ui.screens.home.HomeRoute
 import com.podplay.android.ui.screens.podcast_details.PodcastDetailsRoute
 import com.podplay.android.ui.screens.search.SearchRoute
-import com.podplay.android.util.Constants.FEED_TITLE_KEY
 import com.podplay.android.util.Constants.FEED_URL_KEY
 import com.podplay.android.util.Constants.GUID_KEY
-import com.podplay.android.util.Constants.IMAGE_URL_KEY
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -56,14 +53,9 @@ fun PodPlayNavHost(
             PodcastDetailsRoute(
                 feedUrl = feedUrl,
                 navigateUp = { navController.navigateUp() },
-                onEpisodeClick = { guid, imageUrl, feedTitle ->
-                    val encodedUrl = URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
+                onEpisodeClick = { guid ->
                     navController.navigate(
-                        Screens.EpisodeDetails.replaceRoute(
-                            guid,
-                            encodedUrl,
-                            feedTitle
-                        )
+                        Screens.EpisodeDetails.replaceGuid(guid)
                     )
                 }
             )
@@ -74,20 +66,11 @@ fun PodPlayNavHost(
             route = Screens.EpisodeDetails.route,
             arguments = listOf(
                 navArgument(GUID_KEY) { type = NavType.StringType },
-                navArgument(FEED_TITLE_KEY) { type = NavType.StringType },
-                navArgument(IMAGE_URL_KEY) { type = NavType.StringType }
             )
         ) { navBackStackEntry ->
             val guid = navBackStackEntry.arguments?.getString(GUID_KEY) ?: ""
-            val feedTitle = navBackStackEntry.arguments?.getString(FEED_TITLE_KEY) ?: ""
-            val imageUrl = navBackStackEntry.arguments?.getString(IMAGE_URL_KEY) ?: ""
-
-            Log.d("TAGGGG", "$guid, $feedTitle, $imageUrl")
-
             EpisodeDetailsRoute(
                 guid = guid,
-                feedTitle = feedTitle,
-                imageUrl = imageUrl,
                 navigateUp = { navController.navigateUp() })
         }
 

@@ -24,13 +24,3 @@ data class PodcastViewData(
     var imageUrl: String? = "",
     var episodes: List<EpisodeViewData>,
 )
-
-data class EpisodeViewData(
-    var guid: String? = "",
-    var title: String? = "",
-    var description: String? = "",
-    var mediaUrl: String? = "",
-    var releaseDate: Date? = null,
-    var duration: String? = "",
-    var isVideo: Boolean = false,
-)

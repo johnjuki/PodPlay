@@ -21,6 +21,8 @@ interface PodcastRepo {
 
     fun getAll(): LiveData<List<Podcast>>
 
+    suspend fun getPodcastById(id: Long) : Podcast
+
     suspend fun getEpisode(guid: String) : Episode?
 
     suspend fun updatePodcastEpisodes(): MutableList<PodcastRepoImpl.PodcastUpdateInfo>
