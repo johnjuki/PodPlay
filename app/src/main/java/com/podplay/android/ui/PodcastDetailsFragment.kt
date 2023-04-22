@@ -2,16 +2,15 @@ package com.podplay.android.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.view.*
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.podplay.android.R
 import com.podplay.android.adapter.EpisodeListAdapter
 import com.podplay.android.databinding.FragmentPodcastDetailsBinding
+import com.podplay.android.model.EpisodeViewData
 import com.podplay.android.viewmodel.PodcastViewModel
 
 class PodcastDetailsFragment : Fragment(), EpisodeListAdapter.EpisodeListAdapterListener {
@@ -35,36 +34,43 @@ class PodcastDetailsFragment : Fragment(), EpisodeListAdapter.EpisodeListAdapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         databinding = FragmentPodcastDetailsBinding.inflate(inflater, container, false)
-        return databinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        podcastViewModel.podcastLiveData.observe(viewLifecycleOwner) { viewData ->
-            if (viewData != null) {
-                databinding.feedTitleTextView.text = viewData.feedTitle
-                databinding.feedDescTextView.text = viewData.feedDesc
-                activity?.let { activity ->
-                    Glide.with(activity).load(viewData.imageUrl).into(databinding.feedImageView)
-                }
-                databinding.feedDescTextView.movementMethod = ScrollingMovementMethod()
-                databinding.episodeRecyclerView.setHasFixedSize(true)
-
-                val layoutManager = LinearLayoutManager(activity)
-                databinding.episodeRecyclerView.layoutManager = layoutManager
-
-                val dividerItemDecoration = DividerItemDecoration(
-                    databinding.episodeRecyclerView.context, layoutManager.orientation
-                )
-                databinding.episodeRecyclerView.addItemDecoration(dividerItemDecoration)
-                episodeListAdapter = EpisodeListAdapter(viewData.episodes, this)
-                databinding.episodeRecyclerView.adapter = episodeListAdapter
-
-                activity?.invalidateOptionsMenu()
-            }
+//        return databinding.root
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+//            setContent {
+//                val podcast by podcastViewModel.podcastLiveData.observeAsState()
+//                PodcastDetailsScreen(podcast = podcast)
+//            }
         }
     }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        podcastViewModel.podcastLiveData.observe(viewLifecycleOwner) { viewData ->
+//            if (viewData != null) {
+//                databinding.feedTitleTextView.text = viewData.feedTitle
+//                databinding.feedDescTextView.text = viewData.feedDesc
+//                activity?.let { activity ->
+//                    Glide.with(activity).load(viewData.imageUrl).into(databinding.feedImageView)
+//                }
+//                databinding.feedDescTextView.movementMethod = ScrollingMovementMethod()
+//                databinding.episodeRecyclerView.setHasFixedSize(true)
+//
+//                val layoutManager = LinearLayoutManager(activity)
+//                databinding.episodeRecyclerView.layoutManager = layoutManager
+//
+//                val dividerItemDecoration = DividerItemDecoration(
+//                    databinding.episodeRecyclerView.context, layoutManager.orientation
+//                )
+//                databinding.episodeRecyclerView.addItemDecoration(dividerItemDecoration)
+//                episodeListAdapter = EpisodeListAdapter(viewData.episodes, this)
+//                databinding.episodeRecyclerView.adapter = episodeListAdapter
+//
+//                activity?.invalidateOptionsMenu()
+//            }
+//        }
+//    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -110,10 +116,10 @@ class PodcastDetailsFragment : Fragment(), EpisodeListAdapter.EpisodeListAdapter
     interface OnPodcastDetailsListener {
         fun onSubscribe()
         fun onUnsubscribe()
-        fun onShowEpisodePlayer(episodeViewData: PodcastViewModel.EpisodeViewData)
+        fun onShowEpisodePlayer(episodeViewData: EpisodeViewData)
     }
 
-    override fun onSelectedEpisode(episodeViewData: PodcastViewModel.EpisodeViewData) {
+    override fun onSelectedEpisode(episodeViewData: EpisodeViewData) {
         listener?.onShowEpisodePlayer(episodeViewData)
     }
 }

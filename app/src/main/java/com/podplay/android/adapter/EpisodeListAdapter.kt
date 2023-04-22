@@ -5,18 +5,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.podplay.android.databinding.EpisodeItemBinding
+import com.podplay.android.model.EpisodeViewData
 import com.podplay.android.util.DateUtils
 import com.podplay.android.util.HtmlUtils
-import com.podplay.android.viewmodel.PodcastViewModel
 
 class EpisodeListAdapter(
-    private var episodeViewList: List<PodcastViewModel.EpisodeViewData>?,
+    private var episodeViewList: List<EpisodeViewData>?,
     private val episodeListAdapterListener: EpisodeListAdapterListener
 ) :
     RecyclerView.Adapter<EpisodeListAdapter.ViewHolder>() {
 
     interface EpisodeListAdapterListener {
-        fun onSelectedEpisode(episodeViewData: PodcastViewModel.EpisodeViewData)
+        fun onSelectedEpisode(episodeViewData: EpisodeViewData)
     }
 
     inner class ViewHolder(
@@ -32,7 +32,7 @@ class EpisodeListAdapter(
             }
         }
 
-        var episodeViewData: PodcastViewModel.EpisodeViewData? = null
+        var episodeViewData: EpisodeViewData? = null
         val titleTextView: TextView = databinding.titleView
         val descTextView: TextView = databinding.descView
         val durationTextView: TextView = databinding.durationView

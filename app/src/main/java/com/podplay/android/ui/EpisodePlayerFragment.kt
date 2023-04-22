@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.podplay.android.databinding.FragmentEpisodePlayerBinding
+import com.podplay.android.model.EpisodeViewData
 import com.podplay.android.service.PodplayMediaCallback
 import com.podplay.android.service.PodplayMediaCallback.Companion.CMD_CHANGESPEED
 import com.podplay.android.service.PodplayMediaCallback.Companion.CMD_EXTRA_SPEED
@@ -347,7 +348,7 @@ class EpisodePlayerFragment : Fragment() {
         }
     }
 
-    private fun startPlaying(episodeViewData: PodcastViewModel.EpisodeViewData) {
+    private fun startPlaying(episodeViewData: EpisodeViewData) {
         val fragmentActivity = activity as FragmentActivity
         val controller = MediaControllerCompat.getMediaController(fragmentActivity)
 

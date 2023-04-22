@@ -1,7 +1,8 @@
 package com.podplay.android.repository
 
-import com.podplay.android.service.ItunesService
+import com.podplay.android.service.PodcastResponse
+import retrofit2.Response
 
-class ItunesRepo(private val itunesService: ItunesService) {
-    suspend fun searchByTerm(term: String) = itunesService.searchPodcastByTerm(term)
+interface ItunesRepo {
+    suspend fun searchByTerm(term: String): Response<PodcastResponse>
 }

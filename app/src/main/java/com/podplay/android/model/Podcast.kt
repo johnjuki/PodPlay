@@ -15,3 +15,22 @@ data class Podcast(
     var lastUpdated: Date = Date(),
     @Ignore var episodes: List<Episode> = listOf(),
 )
+
+data class PodcastViewData(
+    var subscribed: Boolean = false,
+    var feedTitle: String? = "",
+    var feedUrl: String? = "",
+    var feedDesc: String? = "",
+    var imageUrl: String? = "",
+    var episodes: List<EpisodeViewData>,
+)
+
+data class EpisodeViewData(
+    var guid: String? = "",
+    var title: String? = "",
+    var description: String? = "",
+    var mediaUrl: String? = "",
+    var releaseDate: Date? = null,
+    var duration: String? = "",
+    var isVideo: Boolean = false,
+)

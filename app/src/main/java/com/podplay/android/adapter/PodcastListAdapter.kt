@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.podplay.android.databinding.SearchItemBinding
-import com.podplay.android.viewmodel.SearchViewModel
+import com.podplay.android.ui.screens.search.SearchViewModel
 
 class PodcastListAdapter(
     private var podcastSummaryViewList: List<SearchViewModel.PodcastSummaryViewData>?,

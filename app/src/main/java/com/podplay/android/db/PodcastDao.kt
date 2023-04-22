@@ -20,6 +20,12 @@ interface PodcastDao {
     @Query("SELECT * FROM Podcast WHERE feedUrl = :url")
     suspend fun loadPodcast(url: String): Podcast?
 
+    @Query("SELECT * FROM Podcast WHERE id = :id")
+    suspend fun loadPodcastById(id: String) : Podcast?
+
+    @Query("SELECT * FROM Episode WHERE guid = :guid")
+    suspend fun loadEpisode(guid: String) : Episode?
+
     @Insert(onConflict = REPLACE)
     suspend fun insertPodcast(podcast: Podcast): Long
 

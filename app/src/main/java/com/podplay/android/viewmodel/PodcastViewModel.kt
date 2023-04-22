@@ -1,14 +1,17 @@
 package com.podplay.android.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.podplay.android.db.PodPlayDatabase
-import com.podplay.android.db.PodcastDao
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.podplay.android.model.Episode
+import com.podplay.android.model.EpisodeViewData
 import com.podplay.android.model.Podcast
+import com.podplay.android.model.PodcastViewData
 import com.podplay.android.repository.PodcastRepo
+import com.podplay.android.ui.screens.search.SearchViewModel
 import com.podplay.android.util.DateUtils
-import java.util.*
 
 class PodcastViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -18,9 +21,9 @@ class PodcastViewModel(application: Application) : AndroidViewModel(application)
     var livePodcastSummaryData: LiveData<List<SearchViewModel.PodcastSummaryViewData>>? = null
     var activeEpisodeViewData: EpisodeViewData? = null
 
-    val podcastDao: PodcastDao = PodPlayDatabase
-        .getInstance(application, viewModelScope)
-        .podcastDao()
+//    val podcastDao: PodcastDao = PodPlayDatabase
+//        .getInstance(application, viewModelScope)
+//        .podcastDao()
 
     private var activePodcast: Podcast? = null
 
@@ -68,7 +71,7 @@ class PodcastViewModel(application: Application) : AndroidViewModel(application)
     fun saveActivePodcast() {
         val repo = podcastRepo ?: return
         activePodcast?.let {
-            repo.save(it)
+            repo.savePodcast(it)
         }
     }
 
@@ -114,23 +117,4 @@ class PodcastViewModel(application: Application) : AndroidViewModel(application)
             repo.delete(it)
         }
     }
-
-    data class PodcastViewData(
-        var subscribed: Boolean = false,
-        var feedTitle: String? = "",
-        var feedUrl: String? = "",
-        var feedDesc: String? = "",
-        var imageUrl: String? = "",
-        var episodes: List<EpisodeViewData>,
-    )
-
-    data class EpisodeViewData(
-        var guid: String? = "",
-        var title: String? = "",
-        var description: String? = "",
-        var mediaUrl: String? = "",
-        var releaseDate: Date? = null,
-        var duration: String? = "",
-        var isVideo: Boolean = false,
-    )
 }
