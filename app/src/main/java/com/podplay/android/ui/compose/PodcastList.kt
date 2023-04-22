@@ -18,7 +18,7 @@ import com.podplay.android.ui.screens.search.SearchViewModel
 @Composable
 fun PodcastList(
     podcastList: List<SearchViewModel.PodcastSummaryViewData>,
-    onItemClick: (feedUrl: String) -> Unit,
+    onItemClick: (feedUrl: String, imageUrl: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn {
@@ -32,7 +32,7 @@ fun PodcastList(
 @Composable
 fun PodcastItem(
     podcast: SearchViewModel.PodcastSummaryViewData,
-    onItemClicked: (feedUrl: String) -> Unit,
+    onItemClicked: (feedUrl: String, imageUrl: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ListItem(
@@ -51,6 +51,7 @@ fun PodcastItem(
         modifier = Modifier.clickable {
             onItemClicked(
                 podcast.feedUrl!!,
+                podcast.imageUrl!!
             )
         }
     )

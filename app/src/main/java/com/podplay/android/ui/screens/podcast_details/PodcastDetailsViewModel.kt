@@ -20,9 +20,15 @@ class PodcastDetailsViewModel @Inject constructor(
 
     var uiState by mutableStateOf(PodcastDetailsUiState())
 
+    fun updateImageUrl(imageUrl: String) {
+        uiState = uiState.copy(imageUrl = imageUrl)
+    }
+
     fun getPodcast(feedUrl: String) = viewModelScope.launch {
         uiState = uiState.copy(isSearching = true)
-        podcastRepo.getPodcast(feedUrl)?.let { podcast ->
+        podcastRepo.getPodcast(feedUrl)?.let {
+            var podcast = it
+            podcast = podcast.copy(imageUrl = uiState.imageUrl)
             podcastRepo.savePodcast(podcast)
             uiState = uiState.copy(podcast = podcast, isSearching = false)
         } ?: run {

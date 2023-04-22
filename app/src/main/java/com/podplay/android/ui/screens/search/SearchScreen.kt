@@ -27,7 +27,7 @@ import com.podplay.android.ui.compose.PodcastList
 
 @Composable
 fun SearchRoute(
-    onSearchResultClick: (feedUrl: String) -> Unit,
+    onSearchResultClick: (feedUrl: String, imageUrl: String) -> Unit,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
     SearchScreen(onSearchResultClick, viewModel)
@@ -35,7 +35,7 @@ fun SearchRoute(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun SearchScreen(onSearchResultClick: (feedUrl: String) -> Unit, searchViewModel: SearchViewModel) {
+fun SearchScreen(onSearchResultClick: (feedUrl: String,imageUrl: String) -> Unit, searchViewModel: SearchViewModel) {
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }

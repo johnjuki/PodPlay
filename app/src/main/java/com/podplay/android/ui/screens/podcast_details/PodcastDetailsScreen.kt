@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,11 +28,14 @@ import com.podplay.android.util.HtmlUtils
 @Composable
 fun PodcastDetailsRoute(
     feedUrl: String,
+    imageUrl: String,
     navigateUp: () -> Unit,
     onEpisodeClick: (guid: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PodcastDetailsViewModel = hiltViewModel(),
 ) {
+    viewModel.updateImageUrl(imageUrl)
+
     LaunchedEffect(Unit) {
         viewModel.getPodcast(feedUrl)
     }
@@ -52,6 +56,8 @@ fun PodcastDetailsScreen(
     modifier: Modifier = Modifier,
 ) {
 
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -66,8 +72,10 @@ fun PodcastDetailsScreen(
                         )
                     }
                 },
+                scrollBehavior = scrollBehavior,
             )
         },
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
         Surface(
             modifier = Modifier
@@ -86,29 +94,33 @@ fun PodcastDetailsScreen(
                         .fillMaxSize()
                         .padding(start = 16.dp, end = 16.dp),
                 ) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(podcast.imageUrl)
-                                .placeholder(R.drawable.logo)
-                                .crossfade(true)
-                                .build(),
-                            error = painterResource(R.drawable.logo),
-                            contentDescription = null,
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Column {
-                            Text(text = podcast.feedTitle)
-                            Spacer(modifier = Modifier.height(20.dp))
-                            Button(onClick = { /*TODO*/ }) {
-                                Text(text = stringResource(R.string.subscribe))
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Text(text = stringResource(R.string.episodes))
-                    Spacer(modifier = Modifier.height(20.dp))
                     LazyColumn {
+
+                        item {
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(podcast.imageUrl)
+                                        .placeholder(R.drawable.logo)
+                                        .crossfade(true)
+                                        .build(),
+                                    error = painterResource(R.drawable.logo),
+                                    contentDescription = null,
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Column {
+                                    Text(text = podcast.feedTitle)
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                    Button(onClick = { /*TODO*/ }) {
+                                        Text(text = stringResource(R.string.subscribe))
+                                    }
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Text(text = stringResource(R.string.episodes))
+                            Spacer(modifier = Modifier.height(20.dp))
+                        }
+
                         items(podcast.episodes) { episode ->
                             Column(modifier = Modifier.clickable {
                                 onEpisodeClick(episode.guid)

@@ -14,6 +14,7 @@ import com.podplay.android.ui.screens.podcast_details.PodcastDetailsRoute
 import com.podplay.android.ui.screens.search.SearchRoute
 import com.podplay.android.util.Constants.FEED_URL_KEY
 import com.podplay.android.util.Constants.GUID_KEY
+import com.podplay.android.util.Constants.IMAGE_URL_KEY
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -37,9 +38,17 @@ fun PodPlayNavHost(
         // Search
         composable(Screens.Search.route) {
             SearchRoute(
-                onSearchResultClick = { feedUrl ->
-                    val encodedUrl = URLEncoder.encode(feedUrl, StandardCharsets.UTF_8.toString())
-                    navController.navigate(Screens.PodcastDetails.replaceFeedUrl(encodedUrl))
+                onSearchResultClick = { feedUrl, imageUrl ->
+                    val encodedFeedUrl =
+                        URLEncoder.encode(feedUrl, StandardCharsets.UTF_8.toString())
+                    val encodedImageUrl =
+                        URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
+                    navController.navigate(
+                        Screens.PodcastDetails.replaceRoute(
+                            encodedFeedUrl,
+                            encodedImageUrl
+                        )
+                    )
                 },
             )
         }
@@ -47,11 +56,16 @@ fun PodPlayNavHost(
         // Podcast Details
         composable(
             route = Screens.PodcastDetails.route,
-            arguments = listOf(navArgument(FEED_URL_KEY) { type = NavType.StringType })
+            arguments = listOf(
+                navArgument(FEED_URL_KEY) { type = NavType.StringType },
+                navArgument(IMAGE_URL_KEY) { type = NavType.StringType }
+            )
         ) { navBackStackEntry ->
             val feedUrl = navBackStackEntry.arguments?.getString(FEED_URL_KEY) ?: ""
+            val imageUrl = navBackStackEntry.arguments?.getString(IMAGE_URL_KEY) ?: ""
             PodcastDetailsRoute(
                 feedUrl = feedUrl,
+                imageUrl = imageUrl,
                 navigateUp = { navController.navigateUp() },
                 onEpisodeClick = { guid ->
                     navController.navigate(
