@@ -68,8 +68,9 @@ fun PodPlayNavHost(
                 imageUrl = imageUrl,
                 navigateUp = { navController.navigateUp() },
                 onEpisodeClick = { guid ->
+                    val encodedGuid = URLEncoder.encode(guid, StandardCharsets.UTF_8.toString())
                     navController.navigate(
-                        Screens.EpisodeDetails.replaceGuid(guid)
+                        Screens.EpisodeDetails.replaceGuid(encodedGuid)
                     )
                 }
             )

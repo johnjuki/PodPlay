@@ -3,7 +3,7 @@ package com.podplay.android.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import java.util.*
+import java.util.Date
 
 @Entity
 data class Podcast(
@@ -24,3 +24,27 @@ data class PodcastViewData(
     var imageUrl: String? = "",
     var episodes: List<EpisodeViewData>,
 )
+
+// Dummy Data
+object PodcastDummyData {
+    val podcast = Podcast(
+        id = 1,
+        feedUrl = "url",
+        feedTitle = "All In The Mind",
+        feedDesc = "Description",
+        imageUrl = "image.url",
+        lastUpdated = Date(System.currentTimeMillis()),
+        episodes = listOf(
+            Episode(
+                guid = "1",
+                podcastId = 1,
+                title = "How to Change For Good",
+                description = "episode description",
+                mediaUrl = "url",
+                mimeType = "audio",
+                releaseDate = Date(System.currentTimeMillis()),
+                duration = "32:23"
+            )
+        )
+    )
+}

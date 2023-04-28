@@ -15,6 +15,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -23,6 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.podplay.android.R
 import com.podplay.android.util.DateUtils
+import com.podplay.android.util.Description
 import com.podplay.android.util.HtmlUtils
 
 @Composable
@@ -84,7 +87,9 @@ fun PodcastDetailsScreen(
         ) {
             if (uiState.isSearching) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(modifier = Modifier.semantics {
+                        this.contentDescription = Description.PODCAST_DETAILS_LOADING
+                    })
                 }
             } else {
                 val podcast = uiState.podcast
@@ -128,7 +133,8 @@ fun PodcastDetailsScreen(
                                 Text(text = episode.title, fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = HtmlUtils.htmlToSpannable(episode.description).toString(),
+                                    text = HtmlUtils.htmlToSpannable(episode.description)
+                                        .toString(),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis,
                                 )
@@ -149,3 +155,16 @@ fun PodcastDetailsScreen(
         }
     }
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun PodcastDetailsScreenPreview() {
+//    PodcastDetailsScreen(
+//        uiState = PodcastDetailsUiState(
+//            podcast = PodcastDummyData.podcast,
+//            imageUrl = PodcastDummyData.podcast.imageUrl
+//        ),
+//        navigateUp = { /*TODO*/ },
+//        onEpisodeClick = {}
+//    )
+//}

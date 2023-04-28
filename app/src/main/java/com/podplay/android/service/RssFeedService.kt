@@ -1,6 +1,5 @@
 package com.podplay.android.service
 
-import androidx.viewbinding.BuildConfig
 import com.podplay.android.util.DateUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -28,11 +27,13 @@ class RssFeedService private constructor() {
             .connectTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(interceptor)
+            .build()
 
-        if (BuildConfig.DEBUG) {
-            client.addInterceptor(interceptor)
-        }
-        client.build()
+//        if (BuildConfig.DEBUG) {
+//            client.addInterceptor(interceptor)
+//        }
+//        client.build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("${xmlFileURL.split("?")[0]}/")
