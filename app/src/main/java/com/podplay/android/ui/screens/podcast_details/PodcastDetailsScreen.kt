@@ -102,7 +102,10 @@ fun PodcastDetailsScreen(
                     LazyColumn {
 
                         item {
-                            Row(modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 AsyncImage(
                                     model = ImageRequest.Builder(LocalContext.current)
                                         .data(podcast.imageUrl)
@@ -113,13 +116,8 @@ fun PodcastDetailsScreen(
                                     contentDescription = null,
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
-                                Column {
-                                    Text(text = podcast.feedTitle)
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                    Button(onClick = { /*TODO*/ }) {
-                                        Text(text = stringResource(R.string.subscribe))
-                                    }
-                                }
+                                Text(text = podcast.feedTitle)
+
                             }
                             Spacer(modifier = Modifier.height(20.dp))
                             Text(text = stringResource(R.string.episodes))
@@ -127,26 +125,28 @@ fun PodcastDetailsScreen(
                         }
 
                         items(podcast.episodes) { episode ->
-                            Column(modifier = Modifier.clickable {
-                                onEpisodeClick(episode.guid)
-                            }) {
-                                Text(text = episode.title, fontWeight = FontWeight.Bold)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = HtmlUtils.htmlToSpannable(episode.description)
-                                        .toString(),
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Row {
-                                    Text(text = DateUtils.dateToMonthDayYear(episode.releaseDate))
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Text(text = episode.duration)
+                            if (!episode.mimeType.startsWith("video")) {
+                                Column(modifier = Modifier.clickable {
+                                    onEpisodeClick(episode.guid)
+                                }) {
+                                    Text(text = episode.title, fontWeight = FontWeight.Bold)
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = HtmlUtils.htmlToSpannable(episode.description)
+                                            .toString(),
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Row {
+                                        Text(text = DateUtils.dateToMonthDayYear(episode.releaseDate))
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(text = episode.duration)
+                                    }
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Divider()
+                                    Spacer(modifier = Modifier.height(4.dp))
                                 }
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Divider()
-                                Spacer(modifier = Modifier.height(4.dp))
                             }
                         }
                     }

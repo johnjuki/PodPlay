@@ -71,7 +71,7 @@ class PodcastRepoImpl @Inject constructor(
                 episode.podcastId = podcastId
                 episode.imageUrl = podcast.imageUrl
                 episode.podcastName = podcast.feedTitle
-                podcastDao.insertEpisode(episode)
+                if (!episode.mimeType.startsWith("video")) podcastDao.insertEpisode(episode)
             }
         }
     }

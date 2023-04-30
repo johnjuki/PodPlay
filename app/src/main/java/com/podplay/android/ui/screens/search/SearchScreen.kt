@@ -52,7 +52,6 @@ fun SearchScreen(onPodcastClick: (feedUrl: String, imageUrl: String) -> Unit, se
     val focusRequester = remember { FocusRequester() }
     val keyBoardController = LocalSoftwareKeyboardController.current
 
-
     Scaffold(topBar = {
         SearchBar(
             focusRequester = focusRequester,
@@ -66,7 +65,7 @@ fun SearchScreen(onPodcastClick: (feedUrl: String, imageUrl: String) -> Unit, se
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp).focusRequester(focusRequester)) {
                 val searchUiState = searchViewModel.searchUiState
                 if (searchUiState.isSearching) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
