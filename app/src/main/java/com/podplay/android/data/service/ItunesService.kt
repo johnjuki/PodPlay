@@ -1,4 +1,4 @@
-package com.podplay.android.service
+package com.podplay.android.data.service
 
 import retrofit2.Response
 import retrofit2.http.GET

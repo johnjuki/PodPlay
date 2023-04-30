@@ -1,13 +1,24 @@
 package com.podplay.android.ui.screens.search
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,15 +38,15 @@ import com.podplay.android.ui.compose.PodcastList
 
 @Composable
 fun SearchRoute(
-    onSearchResultClick: (feedUrl: String, imageUrl: String) -> Unit,
+    onPodcastClick: (feedUrl: String, imageUrl: String) -> Unit,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
-    SearchScreen(onSearchResultClick, viewModel)
+    SearchScreen(onPodcastClick, viewModel)
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun SearchScreen(onSearchResultClick: (feedUrl: String,imageUrl: String) -> Unit, searchViewModel: SearchViewModel) {
+fun SearchScreen(onPodcastClick: (feedUrl: String, imageUrl: String) -> Unit, searchViewModel: SearchViewModel) {
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -64,7 +75,7 @@ fun SearchScreen(onSearchResultClick: (feedUrl: String,imageUrl: String) -> Unit
                 } else if (searchUiState.podcastSearchList.isNotEmpty()) {
                     PodcastList(
                         podcastList = searchUiState.podcastSearchList,
-                        onItemClick = onSearchResultClick,
+                        onItemClick = onPodcastClick,
                     )
                 }
             }

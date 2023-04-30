@@ -1,4 +1,4 @@
-package com.podplay.android.model
+package com.podplay.android.data.model
 
 import androidx.room.Entity
 import androidx.room.Ignore

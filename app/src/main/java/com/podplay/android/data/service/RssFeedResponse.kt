@@ -1,6 +1,6 @@
-package com.podplay.android.service
+package com.podplay.android.data.service
 
-import java.util.*
+import java.util.Date
 
 data class RssFeedResponse(
     var title: String = "",

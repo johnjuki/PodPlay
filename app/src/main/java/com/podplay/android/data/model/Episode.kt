@@ -1,10 +1,10 @@
-package com.podplay.android.model
+package com.podplay.android.data.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.*
+import java.util.Date
 
 @Entity(
     foreignKeys = [
@@ -20,6 +20,8 @@ import java.util.*
 data class Episode(
     @PrimaryKey var guid: String = "",
     var podcastId: Long? = null,
+    var podcastName: String? = null,
+    var imageUrl: String? = "",
     var title: String = "",
     var description: String = "",
     var mediaUrl: String = "",

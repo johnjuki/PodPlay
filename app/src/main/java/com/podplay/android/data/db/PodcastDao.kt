@@ -1,10 +1,10 @@
-package com.podplay.android.db
+package com.podplay.android.data.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.Companion.REPLACE
-import com.podplay.android.model.Episode
-import com.podplay.android.model.Podcast
+import com.podplay.android.data.model.Episode
+import com.podplay.android.data.model.Podcast
 
 @Dao
 interface PodcastDao {

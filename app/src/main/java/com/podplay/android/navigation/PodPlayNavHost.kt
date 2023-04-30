@@ -38,7 +38,7 @@ fun PodPlayNavHost(
         // Search
         composable(Screens.Search.route) {
             SearchRoute(
-                onSearchResultClick = { feedUrl, imageUrl ->
+                onPodcastClick = { feedUrl, imageUrl ->
                     val encodedFeedUrl =
                         URLEncoder.encode(feedUrl, StandardCharsets.UTF_8.toString())
                     val encodedImageUrl =

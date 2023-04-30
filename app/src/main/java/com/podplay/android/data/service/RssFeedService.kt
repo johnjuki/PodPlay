@@ -1,4 +1,4 @@
-package com.podplay.android.service
+package com.podplay.android.data.service
 
 import com.podplay.android.util.DateUtils
 import kotlinx.coroutines.Dispatchers

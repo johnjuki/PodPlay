@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.podplay.android.repository.ItunesRepo
-import com.podplay.android.service.PodcastResponse
+import com.podplay.android.data.service.PodcastResponse
 import com.podplay.android.util.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

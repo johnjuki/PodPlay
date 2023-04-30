@@ -14,7 +14,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PodPlay.NoActionBar"
+        android:theme="@style/Theme.PodPlay"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
@@ -28,7 +28,7 @@
         </activity>
 
         <service
-            android:name=".service.PodplayMediaService"
+            android:name=".data.service.MediaPlayerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />

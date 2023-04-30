@@ -2,7 +2,8 @@ package com.podplay.android.util
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object DateUtils {
     fun jsonDateToShortDate(jsonDate: String?): String {
@@ -22,10 +23,30 @@ object DateUtils {
         return inFormat.parse(date) ?: Date()
     }
 
-    fun dateToShortDate(date: Date): String {
-        val outputFormat = DateFormat.getDateInstance(
-            DateFormat.SHORT, Locale.getDefault())
-        return outputFormat.format(date)
+    fun dateToMonthDayYear(date: Date): String {
+        val formatter = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+        return formatter.format(date)
     }
+
+//    fun timeToMinutes(timeString: String): String {
+//        val parts = timeString.split(":")
+//        val minutes = parts[0].toInt()
+//        val seconds = parts[1].toInt()
+//        val totalMinutes = minutes + (seconds.toFloat() / 60f)
+//        val roundedMinutes = if (totalMinutes % 1 >= 0.5) {
+//            totalMinutes.toInt() + 1
+//        } else {
+//            totalMinutes.toInt()
+//        }
+//        return if (roundedMinutes < 60) {
+//            "$roundedMinutes min"
+//        } else {
+//            val hours = roundedMinutes / 60
+//            val remainingMinutes = roundedMinutes % 60
+//            "$hours hr $remainingMinutes min"
+//        }
+//    }
+
+
 
 }

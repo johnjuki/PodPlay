@@ -1,4 +1,4 @@
-package com.podplay.android.service
+package com.podplay.android.data.service
 
 data class PodcastResponse(
     val resultCount: Int,

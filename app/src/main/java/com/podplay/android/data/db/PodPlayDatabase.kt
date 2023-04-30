@@ -1,9 +1,9 @@
-package com.podplay.android.db
+package com.podplay.android.data.db
 
 import android.content.Context
 import androidx.room.*
-import com.podplay.android.model.Episode
-import com.podplay.android.model.Podcast
+import com.podplay.android.data.model.Episode
+import com.podplay.android.data.model.Podcast
 import java.util.*
 
 class Converters {
@@ -18,7 +18,7 @@ class Converters {
     }
 }
 
-@Database(entities = [Podcast::class, Episode::class], version = 1)
+@Database(entities = [Podcast::class, Episode::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class PodPlayDatabase : RoomDatabase() {
 
@@ -39,8 +39,7 @@ abstract class PodPlayDatabase : RoomDatabase() {
                     context.applicationContext,
                     PodPlayDatabase::class.java,
                     "PodPlayer",
-                )
-                    .build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }

@@ -1,9 +1,9 @@
 package com.podplay.android.repository
 
 import androidx.lifecycle.LiveData
-import com.podplay.android.model.Episode
-import com.podplay.android.model.Podcast
-import com.podplay.android.service.RssFeedResponse
+import com.podplay.android.data.model.Episode
+import com.podplay.android.data.model.Podcast
+import com.podplay.android.data.service.RssFeedResponse
 
 interface PodcastRepo {
 

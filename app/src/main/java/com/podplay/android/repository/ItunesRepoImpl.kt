@@ -1,6 +1,6 @@
 package com.podplay.android.repository
 
-import com.podplay.android.service.ItunesService
+import com.podplay.android.data.service.ItunesService
 import javax.inject.Inject
 
 class ItunesRepoImpl @Inject constructor(private val itunesService: ItunesService) : ItunesRepo {

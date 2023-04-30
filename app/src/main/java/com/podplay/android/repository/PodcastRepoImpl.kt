@@ -1,11 +1,11 @@
 package com.podplay.android.repository
 
 import androidx.lifecycle.LiveData
-import com.podplay.android.db.PodcastDao
-import com.podplay.android.model.Episode
-import com.podplay.android.model.Podcast
-import com.podplay.android.service.RssFeedResponse
-import com.podplay.android.service.RssFeedService
+import com.podplay.android.data.db.PodcastDao
+import com.podplay.android.data.model.Episode
+import com.podplay.android.data.model.Podcast
+import com.podplay.android.data.service.RssFeedResponse
+import com.podplay.android.data.service.RssFeedService
 import com.podplay.android.util.DateUtils
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -40,6 +40,8 @@ class PodcastRepoImpl @Inject constructor(
             Episode(
                 it.guid ?: "",
                 null,
+                null,
+                null,
                 it.title ?: "",
                 it.description ?: "",
                 it.url ?: "",
@@ -67,6 +69,8 @@ class PodcastRepoImpl @Inject constructor(
             val podcastId = podcastDao.insertPodcast(podcast)
             for (episode in podcast.episodes) {
                 episode.podcastId = podcastId
+                episode.imageUrl = podcast.imageUrl
+                episode.podcastName = podcast.feedTitle
                 podcastDao.insertEpisode(episode)
             }
         }

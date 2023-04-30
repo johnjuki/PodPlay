@@ -17,4 +17,8 @@
     <string name="_0_00">0:00</string>
     <string name="artwork_art">Artwork art</string>
     <string name="episodes">Episodes</string>
+    <string name="playback_notification_channel_name">PodPlay</string>
+    <string name="playback_notification_channel_description">Playback notification for PodPlay</string>
+    <string name="podcast_thumbnail">Podcast thumbnail</string>
+    <string name="close">Close\n</string>
 </resources>

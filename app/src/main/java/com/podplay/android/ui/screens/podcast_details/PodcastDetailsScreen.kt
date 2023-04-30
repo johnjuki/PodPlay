@@ -140,7 +140,7 @@ fun PodcastDetailsScreen(
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Row {
-                                    Text(text = DateUtils.dateToShortDate(episode.releaseDate))
+                                    Text(text = DateUtils.dateToMonthDayYear(episode.releaseDate))
                                     Spacer(modifier = Modifier.weight(1f))
                                     Text(text = episode.duration)
                                 }
@@ -155,16 +155,3 @@ fun PodcastDetailsScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PodcastDetailsScreenPreview() {
-//    PodcastDetailsScreen(
-//        uiState = PodcastDetailsUiState(
-//            podcast = PodcastDummyData.podcast,
-//            imageUrl = PodcastDummyData.podcast.imageUrl
-//        ),
-//        navigateUp = { /*TODO*/ },
-//        onEpisodeClick = {}
-//    )
-//}

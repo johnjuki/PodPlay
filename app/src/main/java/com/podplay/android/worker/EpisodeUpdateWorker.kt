@@ -10,10 +10,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.podplay.android.MainActivity
 import com.podplay.android.R
 import com.podplay.android.repository.PodcastRepo
 import com.podplay.android.repository.PodcastRepoImpl
-import com.podplay.android.ui.PodcastActivity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -51,7 +51,7 @@ class EpisodeUpdateWorker @Inject constructor(
 
     private fun displayNotification(podcastInfo: PodcastRepoImpl.PodcastUpdateInfo) {
 
-        val contentIntent = Intent(applicationContext, PodcastActivity::class.java)
+        val contentIntent = Intent(applicationContext, MainActivity::class.java)
         contentIntent.putExtra(EXTRA_FEED_URL, podcastInfo.feedUrl)
         val pendingContentIntent = PendingIntent.getActivity(applicationContext, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 

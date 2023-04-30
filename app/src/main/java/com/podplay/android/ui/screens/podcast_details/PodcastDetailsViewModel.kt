@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.podplay.android.model.Podcast
+import com.podplay.android.data.model.Podcast
 import com.podplay.android.repository.ItunesRepo
 import com.podplay.android.repository.PodcastRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +32,8 @@ class PodcastDetailsViewModel @Inject constructor(
             podcastRepo.savePodcast(podcast)
             uiState = uiState.copy(podcast = podcast, isSearching = false)
         } ?: run {
-            uiState = uiState.copy(podcast = Podcast(), isSearching = false) // TODO: Show Error instead
+            uiState =
+                uiState.copy(podcast = Podcast(), isSearching = false) // TODO: Show Error instead
         }
     }
 }

@@ -1,13 +1,15 @@
 package com.podplay.android.di
 
 import android.content.Context
-import com.podplay.android.db.PodPlayDatabase
-import com.podplay.android.db.PodcastDao
+import com.podplay.android.data.db.PodPlayDatabase
+import com.podplay.android.data.db.PodcastDao
+import com.podplay.android.data.exoplayer.PodPlayMediaSource
+import com.podplay.android.data.service.ItunesService
+import com.podplay.android.data.service.MediaPlayerServiceConnection
 import com.podplay.android.repository.ItunesRepo
 import com.podplay.android.repository.ItunesRepoImpl
 import com.podplay.android.repository.PodcastRepo
 import com.podplay.android.repository.PodcastRepoImpl
-import com.podplay.android.service.ItunesService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,5 +45,12 @@ object MainModule {
 
     @Provides
     fun providePodcastRepo(podcastRepoImpl: PodcastRepoImpl) : PodcastRepo = podcastRepoImpl
+
+    @Provides
+    @Singleton
+    fun provideMediaPlayerServiceConnection(
+        @ApplicationContext context: Context,
+        mediaSource: PodPlayMediaSource
+    ) : MediaPlayerServiceConnection = MediaPlayerServiceConnection(context, mediaSource)
 
 }
