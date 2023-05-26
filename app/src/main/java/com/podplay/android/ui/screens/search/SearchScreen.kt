@@ -111,7 +111,7 @@ fun SearchScreen(
                     && recentSearchList.value.isNotEmpty()
                     && searchUiState.isRecentSearchVisible
                 ) {
-                    RecentSearchComposable(recentSearchList.value, focusRequester, searchViewModel)
+                    RecentSearchComposable(recentSearchList.value, focusManager, searchViewModel)
                 }
 
                 SearchResult(
@@ -195,7 +195,7 @@ private fun SearchBar(
 @Composable
 fun RecentSearchComposable(
     recentSearchList: List<RecentSearch>,
-    focusRequester: FocusRequester,
+    focusManager: FocusManager,
     viewModel: SearchViewModel,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -224,8 +224,9 @@ fun RecentSearchComposable(
                             interactionSource = interactionSource,
                             indication = null,
                         ) {
-                            focusRequester.requestFocus()
                             viewModel.updateSearchQuery(recentSearch.searchTerm)
+                            focusManager.clearFocus()
+                            viewModel.searchPodcasts()
                         }
                 )
                 Icon(
@@ -299,7 +300,7 @@ fun PodcastItem(
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(podcast.imageUrl)
-                    .size(56)
+                    .size(102)
                     .placeholder(R.drawable.logo)
                     .crossfade(true)
                     .build(),
