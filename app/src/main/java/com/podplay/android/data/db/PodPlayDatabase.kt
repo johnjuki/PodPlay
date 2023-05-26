@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.*
 import com.podplay.android.data.model.Episode
 import com.podplay.android.data.model.Podcast
+import com.podplay.android.data.model.RecentSearch
 import java.util.*
 
 class Converters {
@@ -18,11 +19,13 @@ class Converters {
     }
 }
 
-@Database(entities = [Podcast::class, Episode::class], version = 3)
+@Database(entities = [Podcast::class, Episode::class, RecentSearch::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class PodPlayDatabase : RoomDatabase() {
 
     abstract fun podcastDao(): PodcastDao
+
+    abstract fun recentSearchDao() : RecentSearchDao
 
     companion object {
         @Volatile

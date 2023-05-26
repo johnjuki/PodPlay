@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @OptIn(DelicateCoroutinesApi::class)
 class PodcastRepoImpl @Inject constructor(
-    private var podcastDao: PodcastDao,
+    private val podcastDao: PodcastDao,
 ) : PodcastRepo {
 
     private val feedService = RssFeedService.instance

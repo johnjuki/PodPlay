@@ -1,4 +1,4 @@
-package com.podplay.android.ui.compose
+package com.podplay.android.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

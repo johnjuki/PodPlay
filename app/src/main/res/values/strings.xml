@@ -23,5 +23,8 @@
     <string name="close">Close\n</string>
     <string name="app_description">Search and listen to audio podcasts.</string>
     <string name="home">Home</string>
-    <string name="subscriptions">Subscription</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="recent">Recent</string>
+    <string name="clear_from_history">Clear %1$s from history</string>
+    <string name="clear_search_history">Clear search history\n</string>
 </resources>
