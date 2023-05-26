@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class EpisodePlayerViewModel @Inject constructor(
+class PodPlayPlayerViewModel @Inject constructor(
     private val serviceConnection: MediaPlayerServiceConnection,
 ) : ViewModel() {
 

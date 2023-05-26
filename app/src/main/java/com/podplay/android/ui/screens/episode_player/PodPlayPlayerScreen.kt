@@ -61,9 +61,9 @@ import com.podplay.android.data.model.Episode
 import kotlin.math.roundToInt
 
 @Composable
-fun EpisodePlayerScreen(
+fun PodPlayPlayerScreen(
     backDispatcher: OnBackPressedDispatcher,
-    podcastPlayer: EpisodePlayerViewModel = hiltViewModel(),
+    podcastPlayer: PodPlayPlayerViewModel = hiltViewModel(),
 ) {
     val episode = podcastPlayer.currentPlayingEpisode.value
     AnimatedVisibility(
@@ -72,17 +72,17 @@ fun EpisodePlayerScreen(
         exit = slideOutVertically(targetOffsetY = { it }),
     ) {
         if (episode != null) {
-            PodcastPlayerBody(episode, backDispatcher, podcastPlayer)
+            PodPlayPlayerBody(episode, backDispatcher, podcastPlayer)
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PodcastPlayerBody(
+fun PodPlayPlayerBody(
     episode: Episode,
     backDispatcher: OnBackPressedDispatcher,
-    episodePlayerViewModel: EpisodePlayerViewModel,
+    podPlayPlayerViewModel: PodPlayPlayerViewModel,
 ) {
     val swipeableState = rememberSwipeableState(initialValue = 0)
     val endAnchor = LocalConfiguration.current.screenHeightDp * LocalDensity.current.density
@@ -94,20 +94,20 @@ fun PodcastPlayerBody(
     val backCallback = remember {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                episodePlayerViewModel.showPlayerFullScreen = false
+                podPlayPlayerViewModel.showPlayerFullScreen = false
             }
         }
     }
 
     val iconResId =
-        if (episodePlayerViewModel.podcastIsPlaying) R.drawable.ic_pause_white else R.drawable.ic_play_arrow_white
+        if (podPlayPlayerViewModel.podcastIsPlaying) R.drawable.ic_pause_white else R.drawable.ic_play_arrow_white
 
     var sliderIsChanging by remember { mutableStateOf(false) }
 
     var localSliderValue by remember { mutableStateOf(0f) }
 
     val sliderProgress =
-        if (sliderIsChanging) localSliderValue else episodePlayerViewModel.currentEpisodeProgress
+        if (sliderIsChanging) localSliderValue else podPlayPlayerViewModel.currentEpisodeProgress
 
     Box(
         modifier = Modifier
@@ -121,49 +121,49 @@ fun PodcastPlayerBody(
     ) {
         if (swipeableState.currentValue >= 1) {
             LaunchedEffect("key") {
-                episodePlayerViewModel.showPlayerFullScreen = false
+                podPlayPlayerViewModel.showPlayerFullScreen = false
             }
         }
 
-        EpisodePlayerStatelessContent(
+        PodPlayPlayerStatelessContent(
             episode = episode,
             darkTheme = isSystemInDarkTheme(),
             yOffset = swipeableState.offset.value.roundToInt(),
             playPauseIcon = iconResId,
             playbackProgress = sliderProgress,
-            currentTime = episodePlayerViewModel.currentPlaybackFormattedPosition,
-            totalTime = episodePlayerViewModel.currentEpisodeFormattedDuration,
-            onRewind = { episodePlayerViewModel.rewind() },
-            onForward = { episodePlayerViewModel.fastForward() },
-            onTogglePlayback = { episodePlayerViewModel.togglePlaybackState() },
+            currentTime = podPlayPlayerViewModel.currentPlaybackFormattedPosition,
+            totalTime = podPlayPlayerViewModel.currentEpisodeFormattedDuration,
+            onRewind = { podPlayPlayerViewModel.rewind() },
+            onForward = { podPlayPlayerViewModel.fastForward() },
+            onTogglePlayback = { podPlayPlayerViewModel.togglePlaybackState() },
             onSliderChange = {newPosition ->
                 localSliderValue = newPosition
                 sliderIsChanging = true
             },
             onSliderChangeFinished = {
-                episodePlayerViewModel.seekToFraction(localSliderValue)
+                podPlayPlayerViewModel.seekToFraction(localSliderValue)
                 sliderIsChanging = false
             }
         ) {
-            episodePlayerViewModel.showPlayerFullScreen = false
+            podPlayPlayerViewModel.showPlayerFullScreen = false
         }
     }
 
     LaunchedEffect("playbackPosition") {
-        episodePlayerViewModel.updateCurrentPlaybackPosition()
+        podPlayPlayerViewModel.updateCurrentPlaybackPosition()
     }
 
     DisposableEffect(backDispatcher) {
         backDispatcher.addCallback(backCallback)
         onDispose {
             backCallback.remove()
-            episodePlayerViewModel.showPlayerFullScreen = false
+            podPlayPlayerViewModel.showPlayerFullScreen = false
         }
     }
 }
 
 @Composable
-fun EpisodePlayerStatelessContent(
+fun PodPlayPlayerStatelessContent(
     episode: Episode,
     yOffset: Int,
     @DrawableRes playPauseIcon: Int,

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.podplay.android.R
 import com.podplay.android.ui.compose.PodcastImage
-import com.podplay.android.ui.screens.episode_player.EpisodePlayerViewModel
+import com.podplay.android.ui.screens.episode_player.PodPlayPlayerViewModel
 import com.podplay.android.util.DateUtils
 import com.podplay.android.util.HtmlUtils
 
@@ -26,7 +26,7 @@ fun EpisodeDetailsRoute(
     guid: String,
     navigateUp: () -> Unit,
     episodeDetailsViewModel: EpisodeDetailsViewModel = hiltViewModel(),
-    episodePlayerViewModel: EpisodePlayerViewModel = hiltViewModel(),
+    podPlayPlayerViewModel: PodPlayPlayerViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
         episodeDetailsViewModel.getEpisode(guid)
@@ -34,7 +34,7 @@ fun EpisodeDetailsRoute(
     EpisodeDetailsScreen(
         navigateUp = navigateUp,
         uiState = episodeDetailsViewModel.uiState,
-        episodePlayerViewModel = episodePlayerViewModel,
+        podPlayPlayerViewModel = podPlayPlayerViewModel,
     )
 }
 
@@ -43,7 +43,7 @@ fun EpisodeDetailsRoute(
 fun EpisodeDetailsScreen(
     navigateUp: () -> Unit,
     uiState: EpisodeDetailsUiState,
-    episodePlayerViewModel: EpisodePlayerViewModel,
+    podPlayPlayerViewModel: PodPlayPlayerViewModel,
     modifier: Modifier = Modifier,
 ) {
 
@@ -81,8 +81,8 @@ fun EpisodeDetailsScreen(
                 } else {
                     val episode = uiState.episode
                     val playButtonText =
-                        if (episodePlayerViewModel.podcastIsPlaying &&
-                            episodePlayerViewModel.currentPlayingEpisode.value?.guid == episode.guid
+                        if (podPlayPlayerViewModel.podcastIsPlaying &&
+                            podPlayPlayerViewModel.currentPlayingEpisode.value?.guid == episode.guid
                         ) stringResource(id = R.string.pause) else stringResource(id = R.string.play)
 
                     PodcastImage(url = episode.imageUrl ?: "", modifier = Modifier.height(120.dp))
@@ -110,7 +110,7 @@ fun EpisodeDetailsScreen(
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Button(onClick = {
-                        episodePlayerViewModel.playPodcast(listOf(episode), episode)
+                        podPlayPlayerViewModel.playPodcast(listOf(episode), episode)
                     }, modifier = Modifier.width(200.dp)) {
                         Text(
                             text = playButtonText,

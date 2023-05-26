@@ -5,11 +5,6 @@ import com.podplay.android.util.Constants.GUID_KEY
 import com.podplay.android.util.Constants.IMAGE_URL_KEY
 
 sealed class Screens(val route: String) {
-
-    object Home : Screens(route = "home_route")
-
-    object Search : Screens(route = "search_route")
-
     object PodcastDetails : Screens(route = "podcast_route/{$FEED_URL_KEY}/{$IMAGE_URL_KEY}") {
         fun replaceRoute(feedUrl: String, imageUrl: String): String {
             return this.route.replace("{$FEED_URL_KEY}", feedUrl)

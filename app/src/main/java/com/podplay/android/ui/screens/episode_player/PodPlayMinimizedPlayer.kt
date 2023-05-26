@@ -50,22 +50,22 @@ import com.podplay.android.data.model.Episode
 import kotlin.math.roundToInt
 
 @Composable
-fun PodPlayBottomBar(
+fun PodPlayMinimizedPlayer(
     modifier: Modifier = Modifier,
-    episodePlayer : EpisodePlayerViewModel = hiltViewModel(),
+    episodePlayer : PodPlayPlayerViewModel = hiltViewModel(),
 ) {
     val episode = episodePlayer.currentPlayingEpisode.value
 
     AnimatedVisibility(visible = episode != null, modifier = modifier) {
         if (episode != null) {
-            PodcastBottomBarContent(episode, episodePlayer)
+            PodPlayMinimizedPlayerContent(episode, episodePlayer)
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PodcastBottomBarContent(episode: Episode, episodePlayer: EpisodePlayerViewModel) {
+fun PodPlayMinimizedPlayerContent(episode: Episode, episodePlayer: PodPlayPlayerViewModel) {
     val swipeableState = rememberSwipeableState(0)
     val endAnchor = LocalConfiguration.current.screenWidthDp * LocalDensity.current.density
     val anchors = mapOf(
@@ -91,7 +91,7 @@ fun PodcastBottomBarContent(episode: Episode, episodePlayer: EpisodePlayerViewMo
             }
         }
 
-        PodcastBottomBarStatelessContent(
+        PodPlayMinimizedPlayerStatelessContent(
             episode = episode,
             xOffset = swipeableState.offset.value.roundToInt(),
             darkTheme = isSystemInDarkTheme(),
@@ -106,7 +106,7 @@ fun PodcastBottomBarContent(episode: Episode, episodePlayer: EpisodePlayerViewMo
 }
 
 @Composable
-fun PodcastBottomBarStatelessContent(
+fun PodPlayMinimizedPlayerStatelessContent(
     episode: Episode,
     xOffset: Int,
     darkTheme: Boolean,

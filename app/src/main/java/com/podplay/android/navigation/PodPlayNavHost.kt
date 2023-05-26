@@ -6,12 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.podplay.android.ui.screens.episode_details.EpisodeDetailsRoute
 import com.podplay.android.ui.screens.home.HomeRoute
 import com.podplay.android.ui.screens.podcast_details.PodcastDetailsRoute
 import com.podplay.android.ui.screens.search.SearchRoute
+import com.podplay.android.ui.screens.subscriptions.SubscriptionsRoute
 import com.podplay.android.util.Constants.FEED_URL_KEY
 import com.podplay.android.util.Constants.GUID_KEY
 import com.podplay.android.util.Constants.IMAGE_URL_KEY
@@ -20,23 +20,23 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun PodPlayNavHost(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    startDestination: String = homeNavRoute,
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.Home.route,
+        startDestination = startDestination,
+        modifier = modifier,
     ) {
 
         // HOME
-        composable(Screens.Home.route) {
-            HomeRoute(onSearchBarClick = {
-                navController.navigate(Screens.Search.route)
-            })
+        composable(homeNavRoute) {
+            HomeRoute()
         }
 
         // Search
-        composable(Screens.Search.route) {
+        composable(searchNavRoute) {
             SearchRoute(
                 onPodcastClick = { feedUrl, imageUrl ->
                     val encodedFeedUrl =
@@ -53,7 +53,12 @@ fun PodPlayNavHost(
             )
         }
 
-        // Podcast Details
+        // SUBSCRIPTIONS
+        composable(subscriptionsNavRoute) {
+            SubscriptionsRoute()
+        }
+
+        // PODCAST DETAILS
         composable(
             route = Screens.PodcastDetails.route,
             arguments = listOf(
@@ -76,7 +81,7 @@ fun PodPlayNavHost(
             )
         }
 
-        // Episode Details
+        // EPISODE DETAILS
         composable(
             route = Screens.EpisodeDetails.route,
             arguments = listOf(
@@ -86,7 +91,8 @@ fun PodPlayNavHost(
             val guid = navBackStackEntry.arguments?.getString(GUID_KEY) ?: ""
             EpisodeDetailsRoute(
                 guid = guid,
-                navigateUp = { navController.navigateUp() })
+                navigateUp = { navController.navigateUp() }
+            )
         }
 
     }

@@ -22,4 +22,6 @@
     <string name="podcast_thumbnail">Podcast thumbnail</string>
     <string name="close">Close\n</string>
     <string name="app_description">Search and listen to audio podcasts.</string>
+    <string name="home">Home</string>
+    <string name="subscriptions">Subscription</string>
 </resources>
