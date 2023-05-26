@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.podplay.android.R
-import com.podplay.android.ui.compose.PodcastImage
+import com.podplay.android.ui.common.PodcastImage
 import com.podplay.android.ui.screens.episode_player.PodPlayPlayerViewModel
 import com.podplay.android.util.DateUtils
 import com.podplay.android.util.HtmlUtils
