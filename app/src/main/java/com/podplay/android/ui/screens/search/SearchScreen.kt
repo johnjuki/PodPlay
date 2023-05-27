@@ -23,7 +23,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -36,28 +35,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.podplay.android.R
 import com.podplay.android.data.model.RecentSearch
+import com.podplay.android.ui.common.PodcastItem
 import com.podplay.android.ui.common.RefreshIndicator
 
 @Composable
@@ -118,7 +112,7 @@ fun SearchScreen(
                     podcastList = searchUiState.podcastSearchList,
                     pullRefreshState = pullRefreshState,
                     searchUiState = searchUiState,
-                    onItemClick = onPodcastClick,
+                    onPodcastClick = onPodcastClick,
                 )
             }
         }
@@ -260,7 +254,7 @@ fun SearchResult(
     podcastList: List<SearchViewModel.PodcastSummaryViewData>,
     pullRefreshState: PullRefreshState,
     searchUiState: SearchUiState,
-    onItemClick: (feedUrl: String, imageUrl: String) -> Unit,
+    onPodcastClick: (feedUrl: String, imageUrl: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -275,7 +269,7 @@ fun SearchResult(
             ) {
                 if (!searchUiState.refreshing) {
                     items(podcastList) { podcast ->
-                        PodcastItem(podcast = podcast, onItemClicked = onItemClick)
+                        PodcastItem(podcast = podcast, onItemClicked = onPodcastClick)
                     }
                 }
             }
@@ -287,42 +281,3 @@ fun SearchResult(
         )
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PodcastItem(
-    podcast: SearchViewModel.PodcastSummaryViewData,
-    onItemClicked: (feedUrl: String, imageUrl: String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    ListItem(
-        leadingContent = {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(podcast.imageUrl)
-                    .size(102)
-                    .placeholder(R.drawable.logo)
-                    .crossfade(true)
-                    .build(),
-                error = painterResource(R.drawable.logo),
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(shape = RoundedCornerShape(4.dp))
-            )
-        },
-        headlineText = {
-            Text(
-                text = podcast.name!!,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        },
-        modifier = modifier.clickable {
-            onItemClicked(
-                podcast.feedUrl!!,
-                podcast.imageUrl!!
-            )
-        }
-    )
-}
-

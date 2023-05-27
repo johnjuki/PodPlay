@@ -9,6 +9,7 @@ import com.podplay.android.data.service.RssFeedService
 import com.podplay.android.util.DateUtils
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -76,12 +77,6 @@ class PodcastRepoImpl @Inject constructor(
         }
     }
 
-    override fun delete(podcast: Podcast) {
-        GlobalScope.launch {
-            podcastDao.deletePodcast(podcast)
-        }
-    }
-
     override fun getAll(): LiveData<List<Podcast>> {
         return podcastDao.loadPodcasts()
     }
@@ -138,6 +133,8 @@ class PodcastRepoImpl @Inject constructor(
             }
         }
     }
+
+    override fun loadSubscriptions(): Flow<List<Podcast>> = podcastDao.loadSubscriptions()
 
     class PodcastUpdateInfo(val feedUrl: String, val name: String, val newCount: Int)
 }

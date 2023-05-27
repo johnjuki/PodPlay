@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.podplay.android.data.model.Episode
 import com.podplay.android.data.model.Podcast
 import com.podplay.android.data.service.RssFeedResponse
+import kotlinx.coroutines.flow.Flow
 
 interface PodcastRepo {
 
@@ -17,8 +18,6 @@ interface PodcastRepo {
 
     fun savePodcast(podcast: Podcast)
 
-    fun delete(podcast: Podcast)
-
     fun getAll(): LiveData<List<Podcast>>
 
     suspend fun getPodcastById(id: Long) : Podcast
@@ -30,4 +29,6 @@ interface PodcastRepo {
     suspend fun getNewEpisodes(localPodcast: Podcast): List<Episode>
 
     fun saveNewEpisodes(podcastId: Long, episodes: List<Episode>)
+
+    fun loadSubscriptions() : Flow<List<Podcast>>
 }
