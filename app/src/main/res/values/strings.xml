@@ -26,5 +26,6 @@
     <string name="subscriptions">Subscriptions</string>
     <string name="recent">Recent</string>
     <string name="clear_from_history">Clear %1$s from history</string>
-    <string name="clear_search_history">Clear search history\n</string>
+    <string name="clear_search_history">Clear search history</string>
+    <string name="subscribed">Subscribed</string>
 </resources>

@@ -1,7 +1,12 @@
 package com.podplay.android.util
 
+import android.os.Build
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
@@ -28,6 +33,24 @@ object DateUtils {
         return formatter.format(date)
     }
 
+    fun formatTimePassed(date: Date): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val instant = Instant.ofEpochMilli(date.time)
+            val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+            val currentDateTime = LocalDateTime.now()
+            val duration = Duration.between(localDateTime, currentDateTime)
+            when {
+                duration.seconds < 60 -> "${duration.seconds} seconds ago"
+                duration.toMinutes() < 60 -> "${duration.toMinutes()} minutes ago"
+                duration.toHours() < 24 -> "${duration.toHours()} hours ago"
+                duration.toDays() <= 7 -> "${duration.toDays()} days ago"
+                else -> dateToMonthDayYear(date)
+            }
+        } else {
+            dateToMonthDayYear(date)
+        }
+    }
+
 //    fun timeToMinutes(timeString: String): String {
 //        val parts = timeString.split(":")
 //        val minutes = parts[0].toInt()
@@ -46,7 +69,6 @@ object DateUtils {
 //            "$hours hr $remainingMinutes min"
 //        }
 //    }
-
 
 
 }

@@ -7,12 +7,14 @@ import java.util.Date
 
 @Entity
 data class Podcast(
-    @PrimaryKey(autoGenerate = true) var id: Long? = null,
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null,
     var feedUrl: String = "",
     var feedTitle: String = "",
     var feedDesc: String = "",
     var imageUrl: String = "",
     var lastUpdated: Date = Date(),
+    var isSubscribed: Boolean = false,
     @Ignore var episodes: List<Episode> = listOf(),
 )
 
@@ -44,7 +46,17 @@ object PodcastDummyData {
                 mimeType = "audio",
                 releaseDate = Date(System.currentTimeMillis()),
                 duration = "32:23"
-            )
+            ),
+            Episode(
+                guid = "2",
+                podcastId = 2,
+                title = "Self-discipline",
+                description = " Self-discipline episode description",
+                mediaUrl = "url",
+                mimeType = "audio",
+                releaseDate = Date(System.currentTimeMillis()),
+                duration = "32:23"
+            ),
         )
     )
 }

@@ -55,7 +55,17 @@ fun PodPlayNavHost(
 
         // SUBSCRIPTIONS
         composable(subscriptionsNavRoute) {
-            SubscriptionsRoute()
+            SubscriptionsRoute(
+                onPodcastClick = {feedUrl, imageUrl ->
+                    val encodedFeedUrl =
+                        URLEncoder.encode(feedUrl, StandardCharsets.UTF_8.toString())
+                    val encodedImageUrl =
+                        URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
+                    navController.navigate(
+                        Screens.PodcastDetails.replaceRoute(encodedFeedUrl, encodedImageUrl)
+                    )
+                }
+            )
         }
 
         // PODCAST DETAILS

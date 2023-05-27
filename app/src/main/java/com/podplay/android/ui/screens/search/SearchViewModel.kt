@@ -84,12 +84,6 @@ class SearchViewModel @Inject constructor(
         recentSearchRepo.clearSearchHistory()
     }
 
-    data class PodcastSummaryViewData(
-        var name: String? = "",
-        var lastUpdated: String? = "",
-        var imageUrl: String? = "",
-        var feedUrl: String? = "")
-
     private fun itunesPodcastToPodcastSummaryView(
         itunesPodcast: PodcastResponse.ItunesPodcast):
             PodcastSummaryViewData {
@@ -99,4 +93,11 @@ class SearchViewModel @Inject constructor(
             itunesPodcast.artworkUrl100,
             itunesPodcast.feedUrl)
     }
+
+    data class PodcastSummaryViewData(
+        var name: String? = "",
+        var lastUpdated: String? = "",
+        var imageUrl: String? = "",
+        var feedUrl: String? = ""
+    )
 }

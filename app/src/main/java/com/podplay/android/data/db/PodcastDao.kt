@@ -5,6 +5,7 @@ import androidx.room.*
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import com.podplay.android.data.model.Episode
 import com.podplay.android.data.model.Podcast
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PodcastDao {
@@ -32,6 +33,6 @@ interface PodcastDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertEpisode(episode: Episode): Long
 
-    @Delete
-    suspend fun deletePodcast(podcast: Podcast)
+    @Query("SELECT * FROM Podcast WHERE isSubscribed = 1 ORDER BY id DESC")
+    fun loadSubscriptions() : Flow<List<Podcast>>
 }
