@@ -19,7 +19,7 @@ class Converters {
     }
 }
 
-@Database(entities = [Podcast::class, Episode::class, RecentSearch::class], version = 4)
+@Database(entities = [Podcast::class, Episode::class, RecentSearch::class], version = 5, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class PodPlayDatabase : RoomDatabase() {
 

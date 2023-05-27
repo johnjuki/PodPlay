@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,6 +48,7 @@ fun PodcastDetailsRoute(
     PodcastDetailsScreen(
         uiState = viewModel.uiState,
         navigateUp = navigateUp,
+        onSubscribeButtonClick = { viewModel.subscribe() },
         onEpisodeClick = onEpisodeClick,
     )
 }
@@ -55,6 +58,7 @@ fun PodcastDetailsRoute(
 fun PodcastDetailsScreen(
     uiState: PodcastDetailsUiState,
     navigateUp: () -> Unit,
+    onSubscribeButtonClick: () -> Unit,
     onEpisodeClick: (guid: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -106,17 +110,33 @@ fun PodcastDetailsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(podcast.imageUrl)
-                                        .placeholder(R.drawable.logo)
-                                        .crossfade(true)
-                                        .build(),
-                                    error = painterResource(R.drawable.logo),
-                                    contentDescription = null,
-                                )
+                                Box(
+                                    modifier = Modifier.size(102.dp)
+                                ) {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(podcast.imageUrl)
+                                            .placeholder(R.drawable.logo)
+                                            .crossfade(true)
+                                            .build(),
+                                        error = painterResource(R.drawable.logo),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(4.dp))
+                                    )
+                                }
                                 Spacer(modifier = Modifier.width(10.dp))
-                                Text(text = podcast.feedTitle)
+                                Column {
+                                    Text(text = podcast.feedTitle)
+                                    Spacer(modifier = Modifier.size(10.dp))
+                                    Button(onClick = onSubscribeButtonClick) {
+                                        Text(
+                                            text = if (podcast.isSubscribed) stringResource(R.string.subscribed)
+                                            else stringResource(id = R.string.subscribe)
+                                        )
+                                    }
+                                }
 
                             }
                             Spacer(modifier = Modifier.height(20.dp))
