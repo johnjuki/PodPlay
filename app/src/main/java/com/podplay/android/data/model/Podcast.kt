@@ -46,7 +46,17 @@ object PodcastDummyData {
                 mimeType = "audio",
                 releaseDate = Date(System.currentTimeMillis()),
                 duration = "32:23"
-            )
+            ),
+            Episode(
+                guid = "2",
+                podcastId = 2,
+                title = "Self-discipline",
+                description = " Self-discipline episode description",
+                mediaUrl = "url",
+                mimeType = "audio",
+                releaseDate = Date(System.currentTimeMillis()),
+                duration = "32:23"
+            ),
         )
     )
 }

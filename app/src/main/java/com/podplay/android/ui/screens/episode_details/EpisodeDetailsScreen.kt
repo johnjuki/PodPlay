@@ -11,11 +11,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.podplay.android.R
+import com.podplay.android.ui.common.ClickableDescription
 import com.podplay.android.ui.common.PodcastImage
 import com.podplay.android.ui.screens.episode_player.PodPlayPlayerViewModel
 import com.podplay.android.util.DateUtils
@@ -47,6 +49,7 @@ fun EpisodeDetailsScreen(
     modifier: Modifier = Modifier,
 ) {
 
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -117,10 +120,11 @@ fun EpisodeDetailsScreen(
                             style = MaterialTheme.typography.labelLarge
                         )
                     }
-
                     Spacer(modifier = Modifier.height(20.dp))
-
-                    Text(text = HtmlUtils.htmlToSpannable(episode.description).toString())
+                    ClickableDescription(
+                        text = HtmlUtils.htmlToSpannable(episode.description).toString(),
+                        context = context,
+                    )
                 }
             }
         }
