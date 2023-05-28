@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.podplay.android.MainActivity
+import com.podplay.android.PodPlayActivity
 import com.podplay.android.R
 import com.podplay.android.repository.PodcastRepo
 import com.podplay.android.repository.PodcastRepoImpl
@@ -25,8 +25,6 @@ class EpisodeUpdateWorker @Inject constructor(
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = coroutineScope {
         val job = async {
-//            val db = PodPlayDatabase.getInstance(applicationContext)
-//            val repo = PodcastRepoImpl(RssFeedService.instance, db.podcastDao())
             val podcastUpdates = podcastRepo.updatePodcastEpisodes()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 createNotificationChannel()
@@ -51,7 +49,7 @@ class EpisodeUpdateWorker @Inject constructor(
 
     private fun displayNotification(podcastInfo: PodcastRepoImpl.PodcastUpdateInfo) {
 
-        val contentIntent = Intent(applicationContext, MainActivity::class.java)
+        val contentIntent = Intent(applicationContext, PodPlayActivity::class.java)
         contentIntent.putExtra(EXTRA_FEED_URL, podcastInfo.feedUrl)
         val pendingContentIntent = PendingIntent.getActivity(applicationContext, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 

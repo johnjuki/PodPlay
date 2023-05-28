@@ -11,7 +11,7 @@ import androidx.media.MediaBrowserServiceCompat
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
-import com.podplay.android.MainActivity
+import com.podplay.android.PodPlayActivity
 import com.podplay.android.data.exoplayer.MediaPlaybackPreparer
 import com.podplay.android.data.exoplayer.MediaPlayerNotificationListener
 import com.podplay.android.data.exoplayer.MediaPlayerNotificationManager
@@ -57,7 +57,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "onCreate called")
-        val activityPendingIntent = Intent(this, MainActivity::class.java)
+        val activityPendingIntent = Intent(this, PodPlayActivity::class.java)
             .apply {
                 action = ACTION_PODCAST_NOTIFICATION_CLICK
             }.let {

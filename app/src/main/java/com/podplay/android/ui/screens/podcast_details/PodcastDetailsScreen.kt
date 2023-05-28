@@ -223,7 +223,11 @@ private fun EpisodesList(
                             .fillMaxSize()
                             .padding(10.dp),
                     ) {
-                        Text(text = episode.title, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            text = episode.title, fontWeight = FontWeight.SemiBold,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = HtmlUtils.htmlToSpannable(episode.description)

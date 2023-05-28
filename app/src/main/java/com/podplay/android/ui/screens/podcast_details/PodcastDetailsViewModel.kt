@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.podplay.android.data.model.Podcast
-import com.podplay.android.repository.ItunesRepo
 import com.podplay.android.repository.PodcastRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PodcastDetailsViewModel @Inject constructor(
     private val podcastRepo: PodcastRepo,
-    private val itunesRepo: ItunesRepo,
 ) : ViewModel() {
 
     var uiState by mutableStateOf(PodcastDetailsUiState())
@@ -40,6 +38,6 @@ class PodcastDetailsViewModel @Inject constructor(
     fun subscribe() = viewModelScope.launch {
         uiState =
             uiState.copy(podcast = uiState.podcast.copy(isSubscribed = !uiState.podcast.isSubscribed))
-           podcastRepo.updateSubscription(uiState.podcast)
+        podcastRepo.updateSubscription(uiState.podcast)
     }
 }
