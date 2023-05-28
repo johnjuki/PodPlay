@@ -232,7 +232,8 @@ fun PodPlayPlayerStatelessContent(
 
                         Column(modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp)) {
+                            .padding(vertical = 24.dp)
+                        ) {
                             Slider(
                                 value = playbackProgress,
                                 modifier = Modifier.fillMaxWidth(),
