@@ -32,23 +32,18 @@ fun PodPlayNavHost(
 
         // HOME
         composable(homeNavRoute) {
-            HomeRoute()
+            HomeRoute(
+                onPodcastClick = { feedUrl, imageUrl ->
+                    navigateToPodcastDetails(feedUrl, imageUrl, navController)
+                }
+            )
         }
 
         // Search
         composable(searchNavRoute) {
             SearchRoute(
                 onPodcastClick = { feedUrl, imageUrl ->
-                    val encodedFeedUrl =
-                        URLEncoder.encode(feedUrl, StandardCharsets.UTF_8.toString())
-                    val encodedImageUrl =
-                        URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
-                    navController.navigate(
-                        Screens.PodcastDetails.replaceRoute(
-                            encodedFeedUrl,
-                            encodedImageUrl
-                        )
-                    )
+                    navigateToPodcastDetails(feedUrl, imageUrl, navController)
                 },
             )
         }
@@ -56,14 +51,8 @@ fun PodPlayNavHost(
         // SUBSCRIPTIONS
         composable(subscriptionsNavRoute) {
             SubscriptionsRoute(
-                onPodcastClick = {feedUrl, imageUrl ->
-                    val encodedFeedUrl =
-                        URLEncoder.encode(feedUrl, StandardCharsets.UTF_8.toString())
-                    val encodedImageUrl =
-                        URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
-                    navController.navigate(
-                        Screens.PodcastDetails.replaceRoute(encodedFeedUrl, encodedImageUrl)
-                    )
+                onPodcastClick = { feedUrl, imageUrl ->
+                    navigateToPodcastDetails(feedUrl, imageUrl, navController)
                 }
             )
         }
@@ -106,4 +95,21 @@ fun PodPlayNavHost(
         }
 
     }
+}
+
+private fun navigateToPodcastDetails(
+    feedUrl: String,
+    imageUrl: String,
+    navController: NavHostController
+) {
+    val encodedFeedUrl =
+        URLEncoder.encode(feedUrl, StandardCharsets.UTF_8.toString())
+    val encodedImageUrl =
+        URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
+    navController.navigate(
+        Screens.PodcastDetails.replaceRoute(
+            encodedFeedUrl,
+            encodedImageUrl
+        )
+    )
 }

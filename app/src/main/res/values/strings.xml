@@ -28,4 +28,5 @@
     <string name="clear_from_history">Clear %1$s from history</string>
     <string name="clear_search_history">Clear search history</string>
     <string name="subscribed">Subscribed</string>
+    <string name="discover">Discover</string>
 </resources>

@@ -18,6 +18,8 @@ interface PodcastRepo {
 
     fun savePodcast(podcast: Podcast)
 
+    suspend fun updateSubscription(podcast: Podcast)
+
     fun getAll(): LiveData<List<Podcast>>
 
     suspend fun getPodcastById(id: Long) : Podcast

@@ -3,6 +3,8 @@ package com.podplay.android.data.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.podplay.android.data.service.PodcastResponse
+import com.podplay.android.util.DateUtils
 import java.util.Date
 
 @Entity
@@ -25,6 +27,23 @@ data class PodcastViewData(
     var feedDesc: String? = "",
     var imageUrl: String? = "",
     var episodes: List<EpisodeViewData>,
+)
+
+fun itunesPodcastToPodcastSummaryView(
+    itunesPodcast: PodcastResponse.ItunesPodcast):
+        PodcastSummaryViewData {
+    return PodcastSummaryViewData(
+        itunesPodcast.collectionCensoredName,
+        DateUtils.jsonDateToShortDate(itunesPodcast.releaseDate),
+        itunesPodcast.artworkUrl100,
+        itunesPodcast.feedUrl)
+}
+
+data class PodcastSummaryViewData(
+    var name: String? = "",
+    var lastUpdated: String? = "",
+    var imageUrl: String? = "",
+    var feedUrl: String? = ""
 )
 
 // Dummy Data

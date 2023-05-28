@@ -6,10 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.podplay.android.data.model.RecentSearch
-import com.podplay.android.data.service.PodcastResponse
+import com.podplay.android.data.model.itunesPodcastToPodcastSummaryView
 import com.podplay.android.repository.ItunesRepo
 import com.podplay.android.repository.RecentSearchRepo
-import com.podplay.android.util.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -83,21 +82,4 @@ class SearchViewModel @Inject constructor(
     fun clearSearchHistory() = viewModelScope.launch {
         recentSearchRepo.clearSearchHistory()
     }
-
-    private fun itunesPodcastToPodcastSummaryView(
-        itunesPodcast: PodcastResponse.ItunesPodcast):
-            PodcastSummaryViewData {
-        return PodcastSummaryViewData(
-            itunesPodcast.collectionCensoredName,
-            DateUtils.jsonDateToShortDate(itunesPodcast.releaseDate),
-            itunesPodcast.artworkUrl100,
-            itunesPodcast.feedUrl)
-    }
-
-    data class PodcastSummaryViewData(
-        var name: String? = "",
-        var lastUpdated: String? = "",
-        var imageUrl: String? = "",
-        var feedUrl: String? = ""
-    )
 }

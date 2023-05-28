@@ -77,6 +77,9 @@ class PodcastRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateSubscription(podcast: Podcast) =
+        podcastDao.updateSubscription(podcast)
+
     override fun getAll(): LiveData<List<Podcast>> {
         return podcastDao.loadPodcasts()
     }

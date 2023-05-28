@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -59,6 +60,9 @@ fun SubscriptionsScreen(
         topBar = {
             MediumTopAppBar(
                 title = { Text(text = stringResource(id = R.string.subscriptions)) },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    scrolledContainerColor = MaterialTheme.colorScheme.background,
+                ),
                 scrollBehavior = scrollBehavior,
             )
         },

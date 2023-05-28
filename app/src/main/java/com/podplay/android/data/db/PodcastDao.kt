@@ -30,6 +30,9 @@ interface PodcastDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertPodcast(podcast: Podcast): Long
 
+    @Update
+    suspend fun updateSubscription(podcast: Podcast)
+
     @Insert(onConflict = REPLACE)
     suspend fun insertEpisode(episode: Episode): Long
 

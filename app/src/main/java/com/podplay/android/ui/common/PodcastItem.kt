@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.podplay.android.R
-import com.podplay.android.ui.screens.search.SearchViewModel
+import com.podplay.android.data.model.PodcastSummaryViewData
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PodcastItem(
-    podcast: SearchViewModel.PodcastSummaryViewData,
+    podcast: PodcastSummaryViewData,
     onItemClicked: (feedUrl: String, imageUrl: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

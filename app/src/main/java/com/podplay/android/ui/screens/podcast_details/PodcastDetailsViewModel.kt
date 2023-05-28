@@ -37,11 +37,9 @@ class PodcastDetailsViewModel @Inject constructor(
         }
     }
 
-    fun subscribe() {
+    fun subscribe() = viewModelScope.launch {
         uiState =
             uiState.copy(podcast = uiState.podcast.copy(isSubscribed = !uiState.podcast.isSubscribed))
-        viewModelScope.launch {
-           podcastRepo.savePodcast(uiState.podcast)
-        }
+           podcastRepo.updateSubscription(uiState.podcast)
     }
 }

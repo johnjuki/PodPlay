@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.podplay.android.R
+import com.podplay.android.data.model.PodcastSummaryViewData
 import com.podplay.android.data.model.RecentSearch
 import com.podplay.android.ui.common.PodcastItem
 import com.podplay.android.ui.common.RefreshIndicator
@@ -251,7 +252,7 @@ fun RecentSearchComposable(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchResult(
-    podcastList: List<SearchViewModel.PodcastSummaryViewData>,
+    podcastList: List<PodcastSummaryViewData>,
     pullRefreshState: PullRefreshState,
     searchUiState: SearchUiState,
     onPodcastClick: (feedUrl: String, imageUrl: String) -> Unit,

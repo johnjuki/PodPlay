@@ -77,9 +77,10 @@ fun PodcastDetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(text = "")
-                },
+                title = { Text(text = "") },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    scrolledContainerColor = MaterialTheme.colorScheme.background,
+                ),
                 navigationIcon = {
                     IconButton(onClick = navigateUp) {
                         Icon(
@@ -160,7 +161,6 @@ private fun PodcastDetailsHeader(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PodcastDetailsTabRow(
     podcast: Podcast,
