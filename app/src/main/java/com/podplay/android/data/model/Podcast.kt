@@ -78,4 +78,65 @@ object PodcastDummyData {
             ),
         )
     )
+
+    val healthList = listOf(
+        PodcastSummaryViewData(
+            name = "On Purpose",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+        PodcastSummaryViewData(
+            name = "Doctors Farmacy",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+    )
+    val selfImprovementList = listOf(
+        PodcastSummaryViewData(
+            name = "Learn This Sooner",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+        PodcastSummaryViewData(
+            name = "The Hardcore Self Help Podcast",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+    )
+    val techList = listOf(
+        PodcastSummaryViewData(
+            name = "Now In Android",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+        PodcastSummaryViewData(
+            name = "Android Developers Backstage",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        )
+    )
+    val businessList = listOf(
+        PodcastSummaryViewData(
+            name = "The Journal",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+        PodcastSummaryViewData(
+            name = "Rich Dad Show",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+    )
+    val foodList = listOf(
+        PodcastSummaryViewData(
+            name = "Gastro pod",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+        PodcastSummaryViewData(
+            name = "The Splendid..",
+            imageUrl = "image.url",
+            feedUrl = "feed.url",
+        ),
+    )
 }

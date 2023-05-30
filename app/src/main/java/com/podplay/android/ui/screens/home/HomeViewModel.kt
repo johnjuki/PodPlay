@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.podplay.android.data.model.itunesPodcastToPodcastSummaryView
 import com.podplay.android.repository.ItunesRepo
-import com.podplay.android.repository.PodcastRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val itunesRepo: ItunesRepo,
-    private val podcastRepo: PodcastRepo,
 ) : ViewModel() {
 
     var homeUiState by mutableStateOf(HomeUiState())

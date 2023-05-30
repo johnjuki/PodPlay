@@ -102,7 +102,7 @@ fun PodcastDetailsScreen(
             if (uiState.isSearching) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(modifier = Modifier.semantics {
-                        this.contentDescription = Description.PODCAST_DETAILS_LOADING
+                        this.contentDescription = Description.LOADING
                     })
                 }
             } else {
@@ -145,6 +145,9 @@ private fun PodcastDetailsHeader(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(4.dp))
+                    .semantics {
+                        this.contentDescription = Description.PODCAST_IMAGE
+                    }
             )
         }
         Spacer(modifier = Modifier.width(15.dp))
@@ -169,7 +172,7 @@ fun PodcastDetailsTabRow(
     modifier: Modifier = Modifier,
 ) {
     var selectedTabIndex by remember { mutableStateOf(0) }
-    val titles = listOf("Episodes", "Description")
+    val titles = listOf(stringResource(id = R.string.episodes), stringResource(R.string.description))
     Column {
         TabRow(selectedTabIndex = selectedTabIndex) {
             titles.forEachIndexed { index, title ->

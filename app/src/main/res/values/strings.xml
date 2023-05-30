@@ -29,4 +29,10 @@
     <string name="clear_search_history">Clear search history</string>
     <string name="subscribed">Subscribed</string>
     <string name="discover">Discover</string>
+    <string name="description">Description</string>
+    <string name="health">Health</string>
+    <string name="self_improvement">Self Improvement</string>
+    <string name="technology">Technology</string>
+    <string name="business">Business</string>
+    <string name="food">Food</string>
 </resources>
