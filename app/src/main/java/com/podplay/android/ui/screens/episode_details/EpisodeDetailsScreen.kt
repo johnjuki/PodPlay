@@ -12,15 +12,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.podplay.android.R
+import com.podplay.android.data.model.Episode
 import com.podplay.android.ui.common.ClickableDescription
 import com.podplay.android.ui.common.PodcastImage
 import com.podplay.android.ui.screens.episode_player.PodPlayPlayerViewModel
 import com.podplay.android.util.DateUtils
+import com.podplay.android.util.Description
 import com.podplay.android.util.HtmlUtils
 
 @Composable
@@ -33,10 +36,16 @@ fun EpisodeDetailsRoute(
     LaunchedEffect(Unit) {
         episodeDetailsViewModel.getEpisode(guid)
     }
+    val context = LocalContext.current
     EpisodeDetailsScreen(
         navigateUp = navigateUp,
         uiState = episodeDetailsViewModel.uiState,
-        podPlayPlayerViewModel = podPlayPlayerViewModel,
+        playPauseText = { if (podPlayPlayerViewModel.podcastIsPlaying &&
+            podPlayPlayerViewModel.currentPlayingEpisode.value?.guid == it
+        ) context.getString(R.string.pause) else context.getString(R.string.play) },
+        onPlayPauseClick = { episode ->
+            podPlayPlayerViewModel.playPodcast(listOf(episode), episode)
+        }
     )
 }
 
@@ -45,8 +54,9 @@ fun EpisodeDetailsRoute(
 fun EpisodeDetailsScreen(
     navigateUp: () -> Unit,
     uiState: EpisodeDetailsUiState,
-    podPlayPlayerViewModel: PodPlayPlayerViewModel,
+    onPlayPauseClick : (episode: Episode) -> Unit,
     modifier: Modifier = Modifier,
+    playPauseText: (text: String) -> String,
 ) {
 
     val context = LocalContext.current
@@ -79,14 +89,12 @@ fun EpisodeDetailsScreen(
             ) {
                 if (uiState.isLoading) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(modifier = Modifier.semantics {
+                            contentDescription = Description.LOADING
+                        })
                     }
                 } else {
                     val episode = uiState.episode
-                    val playButtonText =
-                        if (podPlayPlayerViewModel.podcastIsPlaying &&
-                            podPlayPlayerViewModel.currentPlayingEpisode.value?.guid == episode.guid
-                        ) stringResource(id = R.string.pause) else stringResource(id = R.string.play)
 
                     PodcastImage(url = episode.imageUrl ?: "", modifier = Modifier.height(120.dp))
 
@@ -100,7 +108,10 @@ fun EpisodeDetailsScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = episode.podcastName ?: "", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = episode.podcastName ?: "",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
 
                     Spacer(modifier = Modifier.height(5.dp))
 
@@ -112,11 +123,9 @@ fun EpisodeDetailsScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Button(onClick = {
-                        podPlayPlayerViewModel.playPodcast(listOf(episode), episode)
-                    }, modifier = Modifier.width(200.dp)) {
+                    Button(onClick = { onPlayPauseClick(episode) }, modifier = Modifier.width(200.dp)) {
                         Text(
-                            text = playButtonText,
+                            text = playPauseText(episode.guid) ,
                             style = MaterialTheme.typography.labelLarge
                         )
                     }

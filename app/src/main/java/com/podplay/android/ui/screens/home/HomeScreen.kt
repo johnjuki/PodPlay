@@ -19,6 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +28,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.podplay.android.R
 import com.podplay.android.data.model.PodcastSummaryViewData
+import com.podplay.android.util.Description
 
 @Composable
 fun HomeRoute(
@@ -45,7 +48,8 @@ fun HomeScreen(
 ) {
 
     val context = LocalContext.current
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         topBar = {
@@ -76,35 +80,37 @@ fun HomeScreen(
                 }
                 if (uiState.isLoading) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(modifier = Modifier.semantics {
+                            contentDescription = Description.LOADING
+                        })
                     }
                 } else {
                     DiscoverPodcasts(
-                        title = "Health",
+                        title = stringResource(R.string.health),
                         podcasts = uiState.healthList,
                         context = context,
                         onPodcastClick = onPodcastClick,
                     )
                     DiscoverPodcasts(
-                        title = "Self Improvement",
+                        title = stringResource(R.string.self_improvement),
                         podcasts = uiState.selfImprovementList,
                         context = context,
                         onPodcastClick = onPodcastClick,
                     )
                     DiscoverPodcasts(
-                        title = "Technology",
+                        title = stringResource(R.string.technology),
                         podcasts = uiState.techList,
                         context = context,
                         onPodcastClick = onPodcastClick,
                     )
                     DiscoverPodcasts(
-                        title = "Business",
+                        title = stringResource(R.string.business),
                         podcasts = uiState.businessList,
                         context = context,
                         onPodcastClick = onPodcastClick,
                     )
                     DiscoverPodcasts(
-                        title = "Food",
+                        title = stringResource(R.string.food),
                         podcasts = uiState.foodList,
                         context = context,
                         onPodcastClick = onPodcastClick,
@@ -144,6 +150,7 @@ fun DiscoverPodcasts(
                     .size(width = 106.dp, height = 130.dp)
                     .padding(start = 16.dp, top = 8.dp, bottom = 15.dp)
                     .clickable { onPodcastClick(podcast.feedUrl!!, podcast.imageUrl!!) }
+                    .semantics { contentDescription = Description.PODCAST_IMAGE }
             )
         }
     }

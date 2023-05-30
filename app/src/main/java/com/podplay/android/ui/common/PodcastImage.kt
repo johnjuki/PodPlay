@@ -13,9 +13,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.podplay.android.R
+import com.podplay.android.util.Description
 
 @Composable
 fun PodcastImage(
@@ -37,6 +40,7 @@ fun PodcastImage(
             contentDescription = stringResource(R.string.podcast_thumbnail),
             modifier = modifier
                 .fillMaxSize()
+                .semantics { contentDescription = Description.PODCAST_IMAGE }
         )
     }
 }
